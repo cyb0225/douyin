@@ -2,3 +2,9 @@
 
 package repository
 
+// 用户信息数据
+type UserInfo struct {
+
+
+}
+

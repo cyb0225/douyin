@@ -15,7 +15,7 @@ func Register(c *gin.Context) {
 		"username": username,
 		"password": password,
 	})
-	server.Register(&server.UserNmPw{
+	server.Register(&server.UserRegInfo{
 		Username: username,
 		Password: password,
 	})

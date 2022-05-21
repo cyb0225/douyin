@@ -4,13 +4,13 @@ package server
 import "log"
 
 // 保存账号密码信息，用于和上层进行数据交换
-type UserNmPw struct {
+type UserRegInfo struct {
 	Username string
 	Password string
 }
 
 // 注册, 判断账号密码有效性，加入仓库
-func Register(user *UserNmPw) error {
+func Register(user *UserRegInfo) error {
 
 	// 使用错误链返回
 	if err := user.checkUsername(); err != nil {
@@ -29,13 +29,13 @@ func Register(user *UserNmPw) error {
 //-----------------------------------------------------------------
 
 // 账号有效性判断
-func (msg *UserNmPw) checkUsername() error {
+func (msg *UserRegInfo) checkUsername() error {
 
 	return nil
 }
 
 // 密码有效性判断
-func (msg *UserNmPw) checkPassword() error {
+func (msg *UserRegInfo) checkPassword() error {
 
 	return nil
 }

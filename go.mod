@@ -2,7 +2,16 @@ module github.com/2103561941/douyin
 
 go 1.18
 
-require github.com/gin-gonic/gin v1.7.7
+require (
+	github.com/gin-gonic/gin v1.7.7
+	gorm.io/driver/mysql v1.3.3
+)
+
+require (
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.4 // indirect
+)
 
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
@@ -19,4 +28,5 @@ require (
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/sys v0.0.0-20200116001909-b77594299b42 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
+	gorm.io/gorm v1.23.5
 )

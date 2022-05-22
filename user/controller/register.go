@@ -22,6 +22,7 @@ type regResponse struct {
 /*
 获取用户发送的用户名和密码，使用service层进行逻辑处理，
 针对注册是否有效返回不同的json报文
+创建token，用于进入用户页面后的鉴权
 */
 
 func Register(c *gin.Context) {
@@ -31,6 +32,8 @@ func Register(c *gin.Context) {
 		Password: c.Query("password"),
 	}
 
+	token := newUser.Username + newUser.Password
+
 	// 注册账号并返回json响应
 	if err := newUser.Register(); err != nil { // 注册失败
 		c.JSON(http.StatusOK, Response{
@@ -38,10 +41,16 @@ func Register(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else { // 注册成功
+		userLoginInfos[token] = &userJsonInfo{
+			ID:            newUser.ID,
+			Username:      newUser.Username,
+			FollowCount:   0,
+			FollowerCount: 0,
+		}
 		c.JSON(http.StatusOK, regResponse{
 			Response: Response{Status_code: 0},
 			User_id:  newUser.ID,
-			Token:    newUser.Username + newUser.Password,
+			Token:    token,
 		})
 	}
 

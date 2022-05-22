@@ -13,5 +13,5 @@ func InitRouter(engine *gin.Engine) {
 	user := apiRouter.Group("/user")
 	user.POST("/register/", controller.Register)
 	user.POST("/login/", controller.Login)
-
+	user.GET("/", controller.GetUserInfo)
 }

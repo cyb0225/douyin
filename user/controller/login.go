@@ -22,6 +22,7 @@ type loginResponse struct {
 /*
 接收用户发送的用户名和密码，判断用户名是否存在，密码是否正确
 根据是否成功登录，返回不同的状态码
+创建token，用于进入用户页面后的鉴权
 */
 func Login(c *gin.Context) {
 
@@ -31,6 +32,8 @@ func Login(c *gin.Context) {
 		Password: c.Query("password"),
 	}
 
+	token := user.Username + user.Password
+
 	// 登录并返回登录响应
 	if err := user.Login(); err != nil { // 登录失败
 		c.JSON(http.StatusOK, Response{
@@ -38,10 +41,14 @@ func Login(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else { // 登录成功
+		userLoginInfos[token] = &userJsonInfo{
+			ID:            user.ID,
+			Username:      user.Username,
+		}
 		c.JSON(http.StatusOK, loginResponse{
 			Response: Response{Status_code: 0},
-			User_id:     user.ID,
-			Token:       user.Username + user.Password,
+			User_id:  user.ID,
+			Token:    token,
 		})
 	}
 

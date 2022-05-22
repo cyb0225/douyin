@@ -7,7 +7,11 @@ import (
 )
 
 func InitRouter(engine *gin.Engine) {
-	g := engine.Group("/douyin")
-	user := g.Group("/user")
+	apiRouter := engine.Group("/douyin")
+
+	
+	user := apiRouter.Group("/user")
 	user.POST("/register/", controller.Register)
+	user.POST("/login/", controller.Login)
+
 }

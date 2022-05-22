@@ -7,44 +7,44 @@ import (
 	"github.com/2103561941/douyin/user/repository"
 )
 
-// 保存账号密码信息，用于和上层进行数据交换（同样可以作为上层http的接口）
+// 保存账号密码信息，用于和上层进行数据交换
 type UserRegInfo struct {
-	Username string	 `json:"username"`
-	Password string	 `json:"password"`
+	Username string	 
+	Password string	
 	ID       int
 }
 
 // 注册, 判断账号密码有效性，加入仓库
 func (user *UserRegInfo)Register() error {
 
-	// 检测用户名有效性
+	// 用户名无效
 	if err := user.checkUsername(); err != nil {
 		return err
 	}
 
-	// 检测密码有效性
+	// 密码无效
 	if err := user.checkPassword(); err != nil {
 		return err
 	}
 
 	// 创建待插入的记录
-	inputUser := &repository.UserInfo{
+	record := &repository.UserInfo{
 		Username: user.Username,
 		Password: user.Password,
 	}
 
 	// 用户名重名(QueryByUsername 在查不到用户名数据的时候返回错误信息)
-	if err := inputUser.QueryByUsername(); err == nil {
+	if err := record.QueryByUsername(); err == nil {
 		return errors.New("username already exists")
 	}
 
 	// 将新注册的用户名和密码插入数据库的user表
-	if err := inputUser.Insert(); err != nil {
+	if err := record.Insert(); err != nil {
 		return err
 	}
 
 	// 配置用户ID（数据库给的主键）
-	user.ID = inputUser.ID
+	user.ID = record.ID
 
 	return nil
 }

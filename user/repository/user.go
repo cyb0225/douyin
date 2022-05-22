@@ -23,7 +23,7 @@ type UserInfo struct {
 // 用户数据插入, 只做插入操作（查重由调用的函数进行选择）
 func (user *UserInfo) Insert() error {
 
-	//插入失败就报错返回
+	//插入失败
 	if err := db.Create(&user).Error; err != nil {
 		return errors.New("Insert to UserDatabase error")
 	}
@@ -31,10 +31,10 @@ func (user *UserInfo) Insert() error {
 	return nil
 }
 
-// 用户数据查询(通过用户名), 返回查询到的记录数据, 若查询不到则返回err
+// 通过用户名查询记录， 查询到后将记录保存到调用的变量里，查询不到返回err
 func (user *UserInfo) QueryByUsername() error {
 
-	// 查询不到
+	// 查询不到记录
 	result := db.Where("username = ?", user.Username).First(user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return errors.New("record not found")
@@ -42,3 +42,5 @@ func (user *UserInfo) QueryByUsername() error {
 
 	return nil
 }
+
+

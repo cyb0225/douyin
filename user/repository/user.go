@@ -34,5 +34,11 @@ func (user *UserInfo) Insert() error {
 // 用户数据查询(通过用户名), 返回查询到的记录数据, 若查询不到则返回err
 func (user *UserInfo) QueryByUsername() error {
 
+	// 查询不到
+	result := db.Where("username = ?", user.Username).First(user)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New("record not found")
+	}
+
 	return nil
 }

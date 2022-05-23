@@ -44,6 +44,8 @@ func Login(c *gin.Context) {
 		userLoginInfos[token] = &userJsonInfo{
 			ID:            user.ID,
 			Username:      user.Username,
+			FollowCount:   0,
+			FollowerCount: 100000000000000,
 		}
 		c.JSON(http.StatusOK, loginResponse{
 			Response: Response{Status_code: 0},

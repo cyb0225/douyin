@@ -4,20 +4,15 @@ package controller
 import (
 	"net/http"
 
+	"github.com/2103561941/douyin/user/service"
 	"github.com/gin-gonic/gin"
 )
 
-// 用户基本信息 用于json格式返回
-type userJsonInfo struct {
-	ID            int    `json:"id"`
-	Username      string `json:"name"`
-	FollowCount   int    `json:"follow_count"`
-	FollowerCount int    `json:"follower_count"`
-}
+
 
 // 用户登录情况，记录
 var (
-	userLoginInfos = make(map[string]*userJsonInfo)
+	userLoginInfos = make(map[string]*service.UserJsonInfo)
 )
 
 // 返回相应
@@ -25,7 +20,7 @@ type interfaceResponse struct {
 	// 返回相应基本信息
 	Response
 	// 用户基本信息
-	userJsonInfo
+	service.UserJsonInfo
 }
 
 // 返回用户基本信息
@@ -35,19 +30,19 @@ type interfaceResponse struct {
 func GetUserInfo(c *gin.Context) {
 
 	token := c.Query("token")
-	
-	// 判断用户是否已经登录
+
+	// 判断用户是否已经登录 (鉴权)
 	if user, exist := userLoginInfos[token]; exist {
 		c.JSON(http.StatusOK, interfaceResponse{
 			Response: Response{
 				Status_code: 0,
 			},
-			userJsonInfo: *user,
+			UserJsonInfo: *user,
 		})
 	} else {
 		c.JSON(http.StatusOK, Response{
 			Status_code: -1,
-			Status_msg: "Uesr don't exist",
+			Status_msg:  "Uesr don't exist",
 		})
 	}
 

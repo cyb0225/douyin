@@ -15,9 +15,12 @@ var (
 
 // 用户信息数据
 type UserInfo struct {
-	ID       int    `gorm:"primaryKey"`
-	Username string `gorm:"column:username"`
-	Password string `gorm:"column:password"`
+	ID            int    `gorm:"primaryKey"`
+	Username      string `gorm:"column:username"`
+	Password      string `gorm:"column:password"`
+	FollowCount   int    `gorm:"column:followcount"`
+	FollowerCount int    `gorm:"column:followercount"`
+	IsFollow      bool   `gorm:"columu:isfollow"`
 }
 
 // 用户数据插入, 只做插入操作（查重由调用的函数进行选择）
@@ -42,5 +45,3 @@ func (user *UserInfo) QueryByUsername() error {
 
 	return nil
 }
-
-

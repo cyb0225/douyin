@@ -41,7 +41,7 @@ func Register(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else { // 注册成功
-		userLoginInfos[token] = &userJsonInfo{
+		userLoginInfos[token] = &service.UserJsonInfo{
 			ID:            newUser.ID,
 			Username:      newUser.Username,
 			FollowCount:   0,

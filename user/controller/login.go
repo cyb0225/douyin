@@ -41,7 +41,7 @@ func Login(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else { // 登录成功
-		userLoginInfos[token] = &userJsonInfo{
+		userLoginInfos[token] = &service.UserJsonInfo{
 			ID:            user.ID,
 			Username:      user.Username,
 			FollowCount:   0,

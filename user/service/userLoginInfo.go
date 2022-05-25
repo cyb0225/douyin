@@ -7,6 +7,5 @@ type UserJsonInfo struct {
 	Username      string `json:"name"`
 	FollowCount   int    `json:"follow_count"`
 	FollowerCount int    `json:"follower_count"`
-	IsFollow      bool   `json: "is_follow"`
+	IsFollow      bool   `json:"is_follow"`
 }
-

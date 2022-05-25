@@ -29,10 +29,10 @@ func InitUserRep() error {
 // 配置dsn
 func setDSN() string {
 	username := "root"
-	password := "123456"
+	password := "070831"
 	host := "127.0.0.1"
 	port := 3306
-	Dbname := "douyinUser"
+	Dbname := "testsql"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, Dbname)
 	return dsn
 }

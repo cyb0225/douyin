@@ -1,4 +1,4 @@
-package controller
+package vedioctl
 
 import (
 	"github.com/gin-gonic/gin"

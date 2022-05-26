@@ -1,10 +1,11 @@
-package controller
+package vedioctl
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"path/filepath"
+
+	"github.com/gin-gonic/gin"
 )
 
 type publishContent struct {

@@ -1,4 +1,4 @@
-package controller
+package userctl
 
 type User struct {
 	Id            int    `json:"id"`

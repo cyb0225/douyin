@@ -1,14 +1,14 @@
-package controller
+package vedioctl
 
 import (
-	"github.com/2103561941/douyin/vedio/controller"
+	"github.com/2103561941/douyin/vedio/vedioctl"
 	"github.com/gin-gonic/gin"
 )
 
 type feed struct {
 	Response
 	NextTime int `json:"next_time"`
-	controller.VideoInfo
+	vedioctl.VideoInfo
 }
 
 func Feed(c *gin.Context) {

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/2103561941/douyin/service/usersvc"
-	"github.com/2103561941/douyin/commonctl"
+	"github.com/2103561941/douyin/controller/commonctl"
 )
 
 type registerResponse struct {
@@ -31,12 +31,7 @@ func Register(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else { // register success
-		userLoginInfos[token] = &usersvc.UserJsonInfo{
-			ID:            user.ID,
-			Username:      user.Username,
-			FollowCount:   0,
-			FollowerCount: 0,
-		}
+		commonctl.UserLoginMap[token] = struct{}{}
 		c.JSON(http.StatusOK, registerResponse{
 			Response: commonctl.Response{Status_code: 0},
 			ID:       user.ID,

@@ -13,7 +13,6 @@ var (
 
 // video mesages in database table
 type Video struct {
-	Auther         User
 	ID             uint64
 	Title          string
 	PlayUrl        string

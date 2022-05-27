@@ -1,6 +1,6 @@
 package userctl
 
-type User struct {
+type UserReonse struct {
 	Id            int    `json:"id"`
 	Name          string `json:"name"`
 	FollowCount   int    `json:"follow_count"`

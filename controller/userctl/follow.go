@@ -1,10 +1,11 @@
 package userctl
 
 import (
+	"net/http"
+
 	"github.com/2103561941/douyin/controller/commonctl"
 	"github.com/2103561941/douyin/service/usersvc"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // json struct to send back

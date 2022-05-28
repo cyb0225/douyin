@@ -36,7 +36,6 @@ func Follow(c *gin.Context) {
 		})
 
 	} else {
-		//commonctl.UserLoginMap[Token] = struct{}{} 不知道加不加这一行
 		c.JSON(http.StatusOK, loginResponse{
 			Response: commonctl.Response{Status_code: 0},
 		})

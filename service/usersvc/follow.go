@@ -2,6 +2,7 @@ package usersvc
 
 import (
 	"errors"
+
 	"github.com/2103561941/douyin/repository"
 )
 
@@ -26,9 +27,9 @@ const (
 
 func (user *UserFollow) Follow() error {
 	status := &repository.Follow{
-		UserId:     user.User_id,
-		FollowerId: user.To_user_id,
-		Status:     user.Action_type,
+		UserId:   user.User_id,
+		ToUserId: user.To_user_id,
+		Status:   user.Action_type,
 	}
 
 	if err := status.CheckStatus(); err != nil {

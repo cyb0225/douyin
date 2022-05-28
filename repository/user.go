@@ -10,7 +10,7 @@ import (
 
 // user mesages in database table
 type User struct {
-	Id            uint64 `gorm:"column:id"` //5.28 update typo
+	Id            uint64 `gorm:"colomn:id"`
 	Username      string `gorm:"column:username"`
 	Password      string `gorm:"column:password"`
 	FollowCount   uint64 `gorm:"follow_count"`

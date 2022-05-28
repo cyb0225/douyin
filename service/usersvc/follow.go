@@ -12,6 +12,18 @@ type UserFollow struct {
 	Action_type string
 }
 
+const (
+	Not_Followed       string = "0"
+	Followed           string = "1"
+	Followed_by_Others string = "2"
+	Mutual_Followed    string = "3"
+)
+
+const (
+	User_Want_to_Follow   string = "1"
+	User_Want_to_Unfollow string = "2"
+)
+
 func (user *UserFollow) Follow() error {
 	status := &repository.Follow{
 		UserId:     user.User_id,
@@ -34,56 +46,56 @@ func (user *UserFollow) Follow() error {
 	}
 
 	switch status.Status {
-	case "0":
+	case Not_Followed:
 		// not followed
 		/*
 			UPDATE follow
 			SET status = "1"
 			WHERE User_id = user.User_id;
 		*/
-		if user.Action_type == "1" {
-			if err := status.UpdateStatus("1"); err != nil {
+		if user.Action_type == User_Want_to_Follow {
+			if err := status.UpdateStatus(Followed); err != nil {
 				return err
 			}
 		}
-		if user.Action_type == "2" {
+		if user.Action_type == User_Want_to_Unfollow {
 			return errors.New("you didn't follow this user")
 		}
 
-	case "1":
+	case Followed:
 		// already followed this user. 已经关注该用户
-		if user.Action_type == "1" {
+		if user.Action_type == User_Want_to_Follow {
 			return errors.New("you already followed this user")
 		}
-		if user.Action_type == "2" {
-			if err := status.UpdateStatus("0"); err != nil {
+		if user.Action_type == User_Want_to_Unfollow {
+			if err := status.UpdateStatus(Not_Followed); err != nil {
 				return err
 			}
 		}
-	case "2":
+	case Followed_by_Others:
 		// already followed by this user 已经被该用户关注
 		/*
 			UPDATE follow
 			SET status = "3"
 			WHERE User_id = user.User_id;
 		*/
-		if user.Action_type == "1" {
-			if err := status.UpdateStatus("3"); err != nil {
+		if user.Action_type == User_Want_to_Follow {
+			if err := status.UpdateStatus(Mutual_Followed); err != nil {
 				return err
 			}
 		}
 
-		if user.Action_type == "2" {
+		if user.Action_type == User_Want_to_Unfollow {
 			return errors.New("you didn't follow this user")
 		}
 
-	case "3":
+	case Mutual_Followed:
 		// already mutual following 已经互粉
-		if user.Action_type == "1" {
+		if user.Action_type == User_Want_to_Follow {
 			return errors.New("you already mutual following with this user")
 		}
-		if user.Action_type == "2" {
-			if err := status.UpdateStatus("2"); err != nil {
+		if user.Action_type == User_Want_to_Unfollow {
+			if err := status.UpdateStatus(Followed_by_Others); err != nil {
 				return err
 			}
 		}

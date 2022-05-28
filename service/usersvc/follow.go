@@ -35,19 +35,31 @@ func (user *UserFollow) Follow() error {
 
 	switch status.Status {
 	case "0":
-		// not followed 无动作
+		// not followed
 		/*
 			UPDATE follow
 			SET status = "1"
 			WHERE User_id = user.User_id;
 		*/
-		if err := status.UpdateStatus("1"); err != nil {
-			return err
+		if user.Action_type == "1" {
+			if err := status.UpdateStatus("1"); err != nil {
+				return err
+			}
+		}
+		if user.Action_type == "2" {
+			return errors.New("you didn't follow this user")
 		}
 
 	case "1":
 		// already followed this user. 已经关注该用户
-		return errors.New("you already followed this user")
+		if user.Action_type == "1" {
+			return errors.New("you already followed this user")
+		}
+		if user.Action_type == "2" {
+			if err := status.UpdateStatus("0"); err != nil {
+				return err
+			}
+		}
 	case "2":
 		// already followed by this user 已经被该用户关注
 		/*
@@ -55,12 +67,26 @@ func (user *UserFollow) Follow() error {
 			SET status = "3"
 			WHERE User_id = user.User_id;
 		*/
-		if err := status.UpdateStatus("3"); err != nil {
-			return err
+		if user.Action_type == "1" {
+			if err := status.UpdateStatus("3"); err != nil {
+				return err
+			}
 		}
+
+		if user.Action_type == "2" {
+			return errors.New("you didn't follow this user")
+		}
+
 	case "3":
 		// already mutual following 已经互粉
-		return errors.New("you already mutual following with this user")
+		if user.Action_type == "1" {
+			return errors.New("you already mutual following with this user")
+		}
+		if user.Action_type == "2" {
+			if err := status.UpdateStatus("2"); err != nil {
+				return err
+			}
+		}
 	default:
 	}
 

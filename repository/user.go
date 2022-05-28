@@ -56,3 +56,23 @@ func (user *User) SelectByUserId() error {
 
 	return nil
 }
+
+// updata user follow_count by add n
+func (user *User) UpdataFollowCount(n int) error {
+	result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follow_count", int(user.FollowCount) + n)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return result.Error
+	}
+
+	return nil
+}
+
+// updata user follower_count by add n
+func (user *User) UpdataFollowerCount(n int) error {
+	result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follower_count", int(user.FollowerCount) + n)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return result.Error
+	}
+
+	return nil
+}

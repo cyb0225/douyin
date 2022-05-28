@@ -32,11 +32,3 @@ func (user *UserInfo) SetUserInfo() error {
 }
 
 
-func (user *UserInfo) isFollow() bool {
-	// follow := repository.Follow{
-		
-	// }
-
-
-	return true
-}

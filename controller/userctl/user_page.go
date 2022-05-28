@@ -37,12 +37,14 @@ func UserInfo(c *gin.Context) {
 			Status_code: -1,
 			Status_msg:  "user is not login",
 		})
+		return
 	}
 
 	// token is login, and call service to get user infos by user_id
 	user := &usersvc.UserInfo{
 		Id: userId,
 	}
+	
 	if err := user.SetUserInfo(); err != nil { // read record error
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,

@@ -15,9 +15,6 @@ import (
 
 var Db *gorm.DB
 
-
-
-
 func Init() error {
 
 	err := connectToDB()
@@ -33,6 +30,10 @@ func Init() error {
 		return err
 	}
 
+	if err := createFollowTable(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -41,7 +42,7 @@ func Init() error {
 func createUserTable() error {
 
 	// creat usertable by User struct
-	if err := Db.AutoMigrate(User{}); err != nil {
+	if err := Db.AutoMigrate(&User{}); err != nil {
 		return err
 	}
 
@@ -60,9 +61,9 @@ func createVideoTable() error {
 
 func createFollowTable() error {
 
-	if err := Db.AutoMigrate(&Video{}); err != nil {
+	if err := Db.AutoMigrate(&Follow{}); err != nil {
 		return err
-	}
+	} // create follow table
 
 	return nil
 }
@@ -81,7 +82,7 @@ func setDSN() string {
 }
 
 //connect to database and return a DB
-func connectToDB() (error) {
+func connectToDB() error {
 	// connect to mysql by dsn
 	dsn := setDSN()
 	var err error

@@ -12,4 +12,8 @@ func InitRouter(engine *gin.Engine) {
 	user.POST("/register/", userctl.Register)
 	user.POST("/login/", userctl.Login)
 	user.GET("/", userctl.UserInfo)
+
+	relation := apiRouter.Group(("/relation"))
+	relation.POST("/action/", userctl.Follow)
+
 }

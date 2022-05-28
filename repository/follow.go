@@ -6,18 +6,24 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type Follow struct {
-	Id        uint64
-	UserId     uint64 `gorm:"column:user_id"`
-	FollowerId uint64 `gorm:"column:follower_id"`
-	Status     int16  `gorm:"column:status"`
+	Id         uint64 `gorm:"column:id;AUTO_INCREMENT"` //自增
+	UserId     string `gorm:"column:user_id"`
+	FollowerId string `gorm:"column:follower_id"`
+	Status     string `gorm:"column:status"`
 }
 
 func (*Follow) TableName() string {
 	return "follow"
 }
 
+func (user *Follow) Insert() error {
+	if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
+		return errors.New("Insert to UserDatabase -- Follow tabel error")
+	}
+	return nil
+
+}
 
 // select user record by user_id
 func (user *Follow) SelectByUserId() error {
@@ -32,15 +38,21 @@ func (user *Follow) SelectByUserId() error {
 	return nil
 }
 
-func (user *Follow) CheckStatus() error {
-	switch (user.Status) {
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	default:
+func (user *Follow) UpdateStatus(status string) error {
+	//这里需要检查
+	result := Db.Table(user.TableName()).Where("user_id = ? OR follower_id = ?", user.UserId, user.FollowerId).First(user).UpdateColumn("status", status)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
 	}
+	return nil
+}
 
+func (user *Follow) CheckStatus() error {
+	result := Db.Table(user.TableName()).Where("user_id = ? OR follower_id = ?", user.UserId, user.FollowerId).First(user)
 
+	// not found
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
 	return nil
 }

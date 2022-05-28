@@ -13,18 +13,23 @@ import (
 	"gorm.io/gorm"
 )
 
+var Db *gorm.DB
+
+
+
+
 func Init() error {
 
-	db, err := connectToDB()
+	err := connectToDB()
 	if err != nil {
 		return err
 	}
 
-	if err := createUserTable(db); err != nil {
+	if err := createUserTable(); err != nil {
 		return err
 	}
 
-	if err := createVideoTable(db); err != nil {
+	if err := createVideoTable(); err != nil {
 		return err
 	}
 
@@ -33,26 +38,31 @@ func Init() error {
 
 //----------------------------------------------------------------------------------------------------------------
 
-func createUserTable(db *gorm.DB) error {
+func createUserTable() error {
 
 	// creat usertable by User struct
-	if err := db.AutoMigrate(User{}); err != nil {
+	if err := Db.AutoMigrate(User{}); err != nil {
 		return err
 	}
-
-	UserDB = db
 
 	return nil
 }
 
-func createVideoTable(db *gorm.DB) error {
+func createVideoTable() error {
 
 	// creat videotable by User struct
-	if err := db.AutoMigrate(&Video{}); err != nil {
+	if err := Db.AutoMigrate(&Video{}); err != nil {
 		return err
 	}
 
-	VideoDB = db
+	return nil
+}
+
+func createFollowTable() error {
+
+	if err := Db.AutoMigrate(&Video{}); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -71,14 +81,13 @@ func setDSN() string {
 }
 
 //connect to database and return a DB
-func connectToDB() (*gorm.DB, error) {
+func connectToDB() (error) {
 	// connect to mysql by dsn
 	dsn := setDSN()
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		return nil, err
+	var err error
+	if Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{}); err != nil {
+		return err
 	}
 
-	return db, nil
+	return nil
 }

@@ -10,14 +10,14 @@ import (
 	"github.com/2103561941/douyin/repository"
 )
 
-type UserLoginInfo struct {
-	ID       uint64
+type UserLogin struct {
+	Id       uint64
 	Username string
 	Password string
 }
 
 // login
-func (user *UserLoginInfo) Login() error {
+func (user *UserLogin) Login() error {
 
 	record := &repository.User{
 		Username: user.Username,
@@ -34,7 +34,7 @@ func (user *UserLoginInfo) Login() error {
 	}
 
 	// return user_id
-	user.ID = record.ID
+	user.Id = record.Id
 
 	return nil
 }

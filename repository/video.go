@@ -2,18 +2,9 @@
 
 package repository
 
-import (
-	"gorm.io/gorm"
-
-)
-
-var (
-	VideoDB *gorm.DB
-)
-
 // video mesages in database table
 type Video struct {
-	ID             uint64
+	Id             uint64
 	Title          string
 	PlayUrl        string
 	CoverUrl       string

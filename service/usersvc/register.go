@@ -11,14 +11,14 @@ import (
 	"github.com/2103561941/douyin/repository"
 )
 
-type UserRegisterInfo struct {
-	ID       uint64
-	Username string	 
-	Password string	
+type UserRegister struct {
+	Id       uint64
+	Username string
+	Password string
 }
 
 // register, store into repository when success
-func (user *UserRegisterInfo)Register() error {
+func (user *UserRegister) Register() error {
 
 	// Invalid username
 	if err := user.checkUsername(); err != nil {
@@ -47,7 +47,7 @@ func (user *UserRegisterInfo)Register() error {
 	}
 
 	// set user_id to return by object
-	user.ID = record.ID
+	user.Id = record.Id
 
 	return nil
 }
@@ -55,7 +55,7 @@ func (user *UserRegisterInfo)Register() error {
 //-----------------------------------------------------------------
 
 // Determine the validity of the username, return error when username is longger than 32
-func (user *UserRegisterInfo) checkUsername() error {
+func (user *UserRegister) checkUsername() error {
 	if len(user.Username) > 32 {
 		return errors.New("username is greater than 32")
 	}
@@ -63,9 +63,9 @@ func (user *UserRegisterInfo) checkUsername() error {
 	return nil
 }
 
-// Determine the validity of the password, 
+// Determine the validity of the password,
 // return error when password is longger than 32 or when is short than 5
-func (user *UserRegisterInfo) checkPassword() error {
+func (user *UserRegister) checkPassword() error {
 	if len(user.Password) <= 5 {
 		return errors.New("password length is less than or equal to 5")
 	}
@@ -77,9 +77,8 @@ func (user *UserRegisterInfo) checkPassword() error {
 	return nil
 }
 
-
 // password encoding
-func (user *UserRegisterInfo) encodePassword() string {
+func (user *UserRegister) encodePassword() string {
 	// encrypted password
 	enPassword := user.Password
 

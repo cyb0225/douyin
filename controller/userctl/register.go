@@ -5,20 +5,20 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/2103561941/douyin/service/usersvc"
 	"github.com/2103561941/douyin/controller/commonctl"
+	"github.com/2103561941/douyin/service/usersvc"
 )
 
 type registerResponse struct {
 	commonctl.Response
-	ID    uint64 `json:"user_id"`
+	Id    uint64 `json:"user_id"`
 	Token string `json:"token"`
 }
 
 //
 func Register(c *gin.Context) {
 
-	user := usersvc.UserRegisterInfo{
+	user := usersvc.UserRegister{
 		Username: c.Query("username"),
 		Password: c.Query("password"),
 	}
@@ -34,7 +34,7 @@ func Register(c *gin.Context) {
 		commonctl.UserLoginMap[token] = struct{}{}
 		c.JSON(http.StatusOK, registerResponse{
 			Response: commonctl.Response{Status_code: 0},
-			ID:       user.ID,
+			Id:       user.Id,
 			Token:    token,
 		})
 	}

@@ -15,15 +15,13 @@ import (
 // json struct to send back
 type loginResponse struct {
 	commonctl.Response
-	ID uint64 `json:"user_id"`
+	Id    uint64 `json:"user_id"`
 	Token string `json:"token"`
 }
 
-
-
 func Login(c *gin.Context) {
 
-	user := usersvc.UserLoginInfo{
+	user := usersvc.UserLogin{
 		Username: c.Query("username"),
 		Password: c.Query("password"),
 	}
@@ -35,11 +33,11 @@ func Login(c *gin.Context) {
 			Status_code: -1,
 			Status_msg:  err.Error(),
 		})
-	} else { 
+	} else {
 		commonctl.UserLoginMap[token] = struct{}{}
 		c.JSON(http.StatusOK, loginResponse{
 			Response: commonctl.Response{Status_code: 0},
-			ID:  user.ID,
+			Id:       user.Id,
 			Token:    token,
 		})
 	}

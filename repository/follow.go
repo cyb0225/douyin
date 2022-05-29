@@ -18,7 +18,7 @@ func (*Follow) TableName() string {
 }
 
 func (user *Follow) Insert() error {
-	if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
+	if err := Db.Table(user.TableName()).Create(user).Error; err != nil {
 		return errors.New("Insert to UserDatabase -- Follow tabel error")
 	}
 	return nil

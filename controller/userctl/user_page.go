@@ -13,7 +13,7 @@ import (
 
 type UserResponse struct {
 	commonctl.Response
-	usersvc.UserInfo
+	usersvc.UserInfo `json:"user"` 
 }
 
 func UserInfo(c *gin.Context) {
@@ -45,7 +45,9 @@ func UserInfo(c *gin.Context) {
 		Id: userId,
 	}
 	
-	if err := user.SetUserInfo(); err != nil { // read record error
+	callerId := commonctl.UserLoginMap[token]
+
+	if err := user.SetUserInfo(callerId.Id); err != nil { // read record error
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
 			Status_msg:  err.Error(),

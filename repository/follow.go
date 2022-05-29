@@ -8,7 +8,7 @@ import (
 
 type Follow struct {
 	Id       uint64 `gorm:"column:id;AUTO_INCREMENT"` //自增
-	UserId   uint64 `gorm:"column:user_id"`
+	UserId   uint64 `gorm:"column:user_id; index:idx_UserId"`
 	ToUserId uint64 `gorm:"column:to_user_id"`
 	Status   int    `gorm:"column:status"`
 }
@@ -22,6 +22,8 @@ func (user *Follow) Insert() error {
 	if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
 		return errors.New("Insert to UserDatabase -- Follow tabel error")
 	}
+	err := Db.Migrator().HasIndex(&Follow{}, "idx_UserId")
+	println(err)
 	return nil
 
 }

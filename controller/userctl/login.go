@@ -26,7 +26,7 @@ func Login(c *gin.Context) {
 		Password: c.Query("password"),
 	}
 
-	token := user.Username + user.Password
+	token := commonctl.CreatToken(user.Username, user.Password)
 
 	if err := user.Login(); err != nil { // 登录失败
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -34,7 +34,7 @@ func Login(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else {
-		commonctl.UserLoginMap[token] = struct{}{}
+		commonctl.UserLoginMap[token] = user.Id
 		c.JSON(http.StatusOK, loginResponse{
 			Response: commonctl.Response{Status_code: 0},
 			Id:       user.Id,

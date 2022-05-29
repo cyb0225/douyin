@@ -6,12 +6,17 @@ instead of pass token to service even repository(database) to judege
 
 package commonctl
 
+type UserLoginComp struct {
+	UserId uint64 
+}
+
+
 var (
-	UserLoginMap = make(map[string]struct{})
+	UserLoginMap = make(map[string]UserLoginComp)
 )
 
 
-func CreatToken() string {
+func CreatToken(username, password string) string {
 
-	return ""
+	return username + password
 }

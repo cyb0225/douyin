@@ -7,100 +7,132 @@ import (
 )
 
 type UserFollow struct {
-	Id          string
-	User_id     string
-	To_user_id  string
-	Action_type string
+	Id          uint64
+	User_id     uint64
+	To_user_id  uint64
+	Action_type int
 }
 
 const (
-	Not_Followed       string = "0"
-	Followed           string = "1"
-	Followed_by_Others string = "2"
-	Mutual_Followed    string = "3"
+	Not_Followed int = 0
+	Followed     int = 1
+	Undefined    int = -1
 )
 
 const (
-	User_Want_to_Follow   string = "1"
-	User_Want_to_Unfollow string = "2"
+	User_Want_to_Follow   int = 1
+	User_Want_to_Unfollow int = 2
 )
 
-func (user *UserFollow) Follow() error {
-	status := &repository.Follow{
-		UserId:   user.User_id,
-		ToUserId: user.To_user_id,
-		Status:   user.Action_type,
+func (follow *UserFollow) Follow() error {
+
+	// user or to_user is not exist
+	if err := follow.checkUserExist(); err != nil {
+		return err
 	}
 
-	if err := status.CheckStatus(); err != nil {
-		//报错应该是因为没有找到。所以建立对应行 不知道是这个意思不
-		/*
-			INSERT INTO follow(user_id, follower_id, status)
-			VALUES
-			(user.User_id, user.To_user_id, user.Action_type);
-		*/
-
+	status := &repository.Follow{
+		UserId:   follow.User_id,
+		ToUserId: follow.To_user_id,
+		Status:   follow.Action_type,
+	}
+	// record not found
+	if err := status.Select(); err != nil {
 		if err := status.Insert(); err != nil {
 			return err
 		}
-
 	}
 
-	switch status.Status {
-	case Not_Followed:
-		// not followed
-		/*
-			UPDATE follow
-			SET status = "1"
-			WHERE User_id = user.User_id;
-		*/
-		if user.Action_type == User_Want_to_Follow {
-			if err := status.UpdateStatus(Followed); err != nil {
-				return err
-			}
-		}
-		if user.Action_type == User_Want_to_Unfollow {
-			return errors.New("you didn't follow this user")
-		}
+	backstatus := status // 储存数据库操作前的state状态
 
-	case Followed:
-		// already followed this user. 已经关注该用户
-		if user.Action_type == User_Want_to_Follow {
-			return errors.New("you already followed this user")
-		}
-		if user.Action_type == User_Want_to_Unfollow {
-			if err := status.UpdateStatus(Not_Followed); err != nil {
-				return err
-			}
-		}
-	case Followed_by_Others:
-		// already followed by this user 已经被该用户关注
-		/*
-			UPDATE follow
-			SET status = "3"
-			WHERE User_id = user.User_id;
-		*/
-		if user.Action_type == User_Want_to_Follow {
-			if err := status.UpdateStatus(Mutual_Followed); err != nil {
-				return err
-			}
-		}
+	newStatus := follow.transformStatus(status)
 
-		if user.Action_type == User_Want_to_Unfollow {
-			return errors.New("you didn't follow this user")
-		}
+	if newStatus == Undefined {
+		return errors.New("action_type is undefined")
+	}
 
-	case Mutual_Followed:
-		// already mutual following 已经互粉
-		if user.Action_type == User_Want_to_Follow {
-			return errors.New("you already mutual following with this user")
+	if err := status.UpdateStatus(newStatus); err != nil {
+		return err
+	}
+
+	// updata user follow_count and user follower_count
+	if err := follow.changeUsrFollowCount(); err != nil {
+		if errr := status.Undo(backstatus); errr != nil { //如果changecount出现问题，进行数据回滚操作
+			return errr
 		}
-		if user.Action_type == User_Want_to_Unfollow {
-			if err := status.UpdateStatus(Followed_by_Others); err != nil {
-				return err
-			}
+		return err
+	}
+
+	return nil
+}
+
+func (follow *UserFollow) checkUserExist() error {
+	user := &repository.User{
+		Id: follow.User_id,
+	}
+
+	if err := user.SelectByUserId(); err != nil {
+		return err
+	}
+
+	toUser := &repository.User{
+		Id: follow.To_user_id,
+	}
+
+	if err := toUser.SelectByUserId(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// according to action_type, return status
+func (follow *UserFollow) transformStatus(status *repository.Follow) int {
+	switch follow.Action_type {
+
+	case User_Want_to_Follow:
+		if status.Status == Followed {
+			return Undefined
 		}
+		if status.Status == Not_Followed {
+			return Followed
+		}
+		return Undefined
+
+	case User_Want_to_Unfollow:
+		if status.Status == Followed {
+			return Not_Followed
+		}
+		if status.Status == Not_Followed {
+			return Undefined
+		}
+		return Undefined
 	default:
+		return Undefined
+	}
+}
+
+// change user followcount and followercount
+func (follow *UserFollow) changeUsrFollowCount() error {
+	var n int
+	if follow.Action_type == Followed {
+		n = 1
+	} else {
+		n = -1
+	}
+
+	user := repository.User{
+		Id: follow.User_id,
+	}
+	if err := user.UpdataFollowCount(n); err != nil {
+		return err
+	}
+
+	to_user := repository.User{
+		Id: follow.To_user_id,
+	}
+	if err := to_user.UpdataFollowerCount(n); err != nil {
+		return err
 	}
 
 	return nil

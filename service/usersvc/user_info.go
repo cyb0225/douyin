@@ -26,7 +26,9 @@ func (user *UserInfo) SetUserInfo() error {
 	user.Name = record.Username
 	user.FollowCount = record.FollowCount
 	user.FollowerCount = record.FollowerCount
-	user.IsFollow = false
+	user.IsFollow = true
 
 	return nil
 }
+
+

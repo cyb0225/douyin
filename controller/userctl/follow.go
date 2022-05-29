@@ -11,7 +11,7 @@ import (
 
 // json struct to send back
 type inputStringData struct {
-	User_id      string
+	User_id     string
 	To_user_id  string
 	Action_type string
 }
@@ -61,9 +61,7 @@ func Follow(c *gin.Context) {
 
 }
 
-
-
-func (data *inputStringData) transfromToFollow() (*usersvc.UserFollow, error) { 
+func (data *inputStringData) transfromToFollow() (*usersvc.UserFollow, error) {
 	user_id, err := strconv.Atoi(data.User_id)
 	if err != nil {
 		return nil, err
@@ -80,8 +78,8 @@ func (data *inputStringData) transfromToFollow() (*usersvc.UserFollow, error) {
 	}
 
 	user := &usersvc.UserFollow{
-		User_id: uint64(user_id),
-		To_user_id: uint64(to_user_id),
+		User_id:     uint64(user_id),
+		To_user_id:  uint64(to_user_id),
 		Action_type: action_type,
 	}
 

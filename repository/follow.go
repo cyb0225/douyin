@@ -10,7 +10,7 @@ type Follow struct {
 	Id       uint64 `gorm:"column:id;AUTO_INCREMENT"` //自增
 	UserId   uint64 `gorm:"column:user_id"`
 	ToUserId uint64 `gorm:"column:to_user_id"`
-	Status   int `gorm:"column:status"`
+	Status   int    `gorm:"column:status"`
 }
 
 func (*Follow) TableName() string {
@@ -18,6 +18,7 @@ func (*Follow) TableName() string {
 }
 
 func (user *Follow) Insert() error {
+	user.Status = 0
 	if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
 		return errors.New("Insert to UserDatabase -- Follow tabel error")
 	}
@@ -25,7 +26,7 @@ func (user *Follow) Insert() error {
 
 }
 
-// select user record by user_id and  
+// select user record by user_id and
 func (user *Follow) Select() error {
 
 	result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user)
@@ -49,11 +50,20 @@ func (user *Follow) UpdateStatus(newStatus int) error {
 	return nil
 }
 
+func (user *Follow) Undo(follow *Follow) error {
+	result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user).UpdateColumn("status", follow.Status)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
+
+	return nil
+}
 
 func (user *Follow) GetFollowList() ([]*User, error) {
 	var records []*User
 	result := Db.Table(user.TableName()).Where("user_id = ?", user.UserId).Find(records)
-	
+
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())
 	}
@@ -64,7 +74,7 @@ func (user *Follow) GetFollowList() ([]*User, error) {
 func (user *Follow) GetFollowerList() ([]*User, error) {
 	var records []*User
 	result := Db.Table(user.TableName()).Where("to_user_id = ?", user.ToUserId).Find(records)
-	
+
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())
 	}

@@ -34,7 +34,7 @@ func Login(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else {
-		commonctl.UserLoginMap[token] = user.Id
+		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{ Id: user.Id, }
 		c.JSON(http.StatusOK, loginResponse{
 			Response: commonctl.Response{Status_code: 0},
 			Id:       user.Id,

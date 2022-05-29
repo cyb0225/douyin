@@ -23,7 +23,7 @@ func Register(c *gin.Context) {
 		Password: c.Query("password"),
 	}
 
-	token := user.Username + user.Password
+	token := commonctl.CreatToken(user.Username, user.Password)
 
 	if err := user.Register(); err != nil { // register wrong
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -31,7 +31,7 @@ func Register(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else { // register success
-		commonctl.UserLoginMap[token] = struct{}{}
+		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{ Id: user.Id, }
 		c.JSON(http.StatusOK, registerResponse{
 			Response: commonctl.Response{Status_code: 0},
 			Id:       user.Id,

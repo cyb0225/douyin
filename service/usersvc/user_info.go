@@ -13,6 +13,9 @@ type UserInfo struct {
 	IsFollow      bool   `json:"is_follow"`
 }
 
+func()
+
+
 // set the userInfo response
 func (user *UserInfo) SetUserInfo() error {
 	record := &repository.User{

@@ -13,6 +13,21 @@ type UserInfo struct {
 	IsFollow      bool   `json:"is_follow"`
 }
 
+type UserInfoToken struct {
+	UserToken uint64
+	UserInfo
+}
+
+func (user *UserInfoToken) Gettoken(token uint64) error {
+	user.UserToken = token
+}
+
+func (user *UserInfo) getFollowStatus() error {
+	status := &repository.Follow{
+		UserId:   user.Id, //token对应的
+		ToUserId: user.Id, //传入ID
+	}
+}
 
 // set the userInfo response
 func (user *UserInfo) SetUserInfo() error {
@@ -31,5 +46,3 @@ func (user *UserInfo) SetUserInfo() error {
 
 	return nil
 }
-
-

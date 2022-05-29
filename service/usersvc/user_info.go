@@ -13,12 +13,21 @@ type UserInfo struct {
 	IsFollow      bool   `json:"is_follow"`
 }
 
-
-func (user *UserInfo) getFollowStatus() error {
+func (user *UserInfo) getFollowStatus(id uint64) bool {
 	status := &repository.Follow{
-		UserId:   user.Id, //token对应的
+		UserId:   id,      //token对应的
 		ToUserId: user.Id, //传入ID
 	}
+	if ret := status.Select(); ret != nil {
+		return false
+	} else {
+		if status.Status == 1 {
+			return true
+		} else {
+			return false
+		}
+	}
+
 }
 
 // set the userInfo response
@@ -34,7 +43,7 @@ func (user *UserInfo) SetUserInfo(id uint64) error {
 	user.Name = record.Username
 	user.FollowCount = record.FollowCount
 	user.FollowerCount = record.FollowerCount
-	user.IsFollow = true
+	user.IsFollow = user.getFollowStatus(id)
 
 	return nil
 }

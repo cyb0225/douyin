@@ -64,7 +64,7 @@ func (user *Follow) Undo(follow *Follow) error {
 
 func (user *Follow) GetFollowList() ([]*User, error) {
 	var records []*User
-	result := Db.Table(user.TableName()).Where("user_id = ?", user.UserId).Find(records)
+	result := Db.Table(user.TableName()).Where("user_id = ? AND status = 1", user.UserId).Find(records)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())
@@ -75,7 +75,7 @@ func (user *Follow) GetFollowList() ([]*User, error) {
 
 func (user *Follow) GetFollowerList() ([]*User, error) {
 	var records []*User
-	result := Db.Table(user.TableName()).Where("to_user_id = ?", user.ToUserId).Find(records)
+	result := Db.Table(user.TableName()).Where("to_user_id = ? AND status = 1", user.ToUserId).Find(records)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())

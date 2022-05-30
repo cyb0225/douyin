@@ -1,7 +1,6 @@
 package userctl
 
 import (
-	"github.com/2103561941/douyin/repository"
 	"net/http"
 	"strconv"
 
@@ -12,11 +11,12 @@ import (
 
 type FollowListResponse struct {
 	commonctl.Response
-	user []repository.User `json:"user_list"`
+	Followers []*usersvc.UserInfo `json:"user_list"`
 }
 
 func FollowList(c *gin.Context) {
 
+	// query type transform
 	userIdInt, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -25,7 +25,11 @@ func FollowList(c *gin.Context) {
 		})
 		return
 	}
+	userId := uint64(userIdInt) //对象ID
+
+	// Determine if the user is logged in
 	token := c.Query("token")
+
 	if _, ok := commonctl.UserLoginMap[token]; !ok {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
@@ -33,11 +37,21 @@ func FollowList(c *gin.Context) {
 		})
 		return
 	}
-	userId := uint64(userIdInt) //对象ID
 
-	inputData := usersvc.CheckFollowList{
-		Id: userId,
+	inputData := &usersvc.FollowListResponse{
+		UserId: userId,
 	}
 
-	follow_list := usersvc.FollowListResponse{}
+	if err := inputData.FollowList(); err != nil {
+		c.JSON(http.StatusOK, commonctl.Response{
+			Status_code: -1,
+			Status_msg:  "user is not login",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, FollowListResponse{
+		Response: commonctl.Response{ Status_code: 0},
+		Followers: inputData.Followers,
+	})
 }

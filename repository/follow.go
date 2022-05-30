@@ -52,6 +52,7 @@ func (user *Follow) UpdateStatus(newStatus int) error {
 	return nil
 }
 
+// use to go back 
 func (user *Follow) Undo(follow *Follow) error {
 	result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user).UpdateColumn("status", follow.Status)
 
@@ -62,9 +63,16 @@ func (user *Follow) Undo(follow *Follow) error {
 	return nil
 }
 
-func (user *Follow) GetFollowList() ([]*User, error) {
-	var records []*User
-	result := Db.Table(user.TableName()).Where("user_id = ? AND status = 1", user.UserId).Find(records)
+
+/*
+	SELECT * from follow
+	WHERE
+	user_id = id,
+	status = 1
+*/
+func (user *Follow) GetFollowList() ([]*Follow, error) {
+	var records []*Follow
+	result := Db.Table(user.TableName()).Where("user_id = ? AND status = ?", user.UserId, 1).Find(&records)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())
@@ -73,9 +81,9 @@ func (user *Follow) GetFollowList() ([]*User, error) {
 	return records, nil
 }
 
-func (user *Follow) GetFollowerList() ([]*User, error) {
-	var records []*User
-	result := Db.Table(user.TableName()).Where("to_user_id = ? AND status = 1", user.ToUserId).Find(records)
+func (user *Follow) GetFollowerList() ([]*Follow, error) {
+	var records []*Follow
+	result := Db.Table(user.TableName()).Where("to_user_id = ? AND status = ?", user.ToUserId, 1).Find(&records)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())

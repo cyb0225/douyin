@@ -16,7 +16,7 @@ type UserResponse struct {
 	usersvc.UserInfo `json:"user"` 
 }
 
-func UserInfo(c *gin.Context) {
+func GetUserInfo(c *gin.Context) {
 
 	// type transfor : string -> uint64
 	userIntId, err := strconv.Atoi(c.Query("user_id"))

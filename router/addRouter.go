@@ -11,10 +11,10 @@ func InitRouter(engine *gin.Engine) {
 	user := apiRouter.Group("/user")
 	user.POST("/register/", userctl.Register)
 	user.POST("/login/", userctl.Login)
-	user.GET("/", userctl.UserInfo)
+	user.GET("/", userctl.GetUserInfo)
 
 	relation := apiRouter.Group(("/relation"))
 	relation.POST("/action/", userctl.Follow)
 	relation.GET("/follow/list/", userctl.FollowList)
-
+	relation.GET("/follower/list/", userctl.FollowerList)
 }

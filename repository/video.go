@@ -36,10 +36,9 @@ func (video *Video) Create() error {
 	return nil
 }
 
-
 func (video *Video) SelectPublishList() ([]*Video, error) {
 	var records []*Video
-	
+
 	result := Db.Table(video.TableName()).Where("user_id = ?", video.UserId).Find(&records)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -49,4 +48,32 @@ func (video *Video) SelectPublishList() ([]*Video, error) {
 	log.Printf("repository   %d\n", len(records))
 
 	return records, nil
+}
+
+func (video *Video) GetLikeInfo() error {
+	result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
+	return nil
+}
+
+func (video *Video) Like(input *Video) error {
+	result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("favourite_count", input.FavouriteCount+1)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
+
+	return nil
+}
+
+func (video *Video) UnLike(input *Video) error {
+	result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("favourite_count", input.FavouriteCount-1)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
+
+	return nil
 }

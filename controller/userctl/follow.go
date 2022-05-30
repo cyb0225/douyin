@@ -33,7 +33,7 @@ func Follow(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
-			Status_msg:  "user is not login",
+			Status_msg:  "transform fail",
 		})
 		return
 	}

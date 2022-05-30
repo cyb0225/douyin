@@ -27,7 +27,6 @@ func (user *UserInfo) getFollowStatus(id uint64) bool {
 			return false
 		}
 	}
-
 }
 
 // set the userInfo response
@@ -35,6 +34,7 @@ func (user *UserInfo) SetUserInfo(id uint64) error {
 	record := &repository.User{
 		Id: user.Id,
 	}
+	
 	if err := record.SelectByUserId(); err != nil {
 		return err
 	}

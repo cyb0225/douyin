@@ -38,8 +38,8 @@ func GetPublishList(c *gin.Context) {
 	userId := commonctl.UserLoginMap[token].Id // 主动去访问的用户id
 
 	list := videosvc.PublishList{
-		Author: userId,
-		UserId: author,
+		Author: author,
+		UserId: userId,
 	}
 
 	if err := list.GetPublishList(); err != nil {

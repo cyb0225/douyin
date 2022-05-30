@@ -39,7 +39,7 @@ func (video *Video) Create() error {
 
 func (video *Video) SelectPublishList() ([]*Video, error) {
 	var records []*Video
-
+	
 	result := Db.Table(video.TableName()).Where("user_id = ?", video.UserId).Find(&records)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {

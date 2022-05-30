@@ -38,7 +38,7 @@ func (list *PublishList) GetPublishList() error {
 	tmpList := make([]*VideoInfo, len(records))
 
 	for i := 0; i < len(records); i++ {
-		var videoInfo *VideoInfo
+		videoInfo := &VideoInfo{}
 		if err := videoInfo.SetVideoInfo(list.UserId, records[i]); err != nil {
 			return err
 		}
@@ -54,9 +54,19 @@ func (list *PublishList) GetPublishList() error {
 
 // UserId 是视频的发布者，
 func (video *VideoInfo) SetVideoInfo(userId uint64, record *repository.Video) error {
-	video.Id = record.UserId
+	video.Id = record.Id
+
+	// get userInfo
+	video.UserInfo.Id = record.UserId
 	if err := video.UserInfo.SetUserInfo(userId); err != nil {
 		return err
 	}
+
+	video.PlayUrl = record.PlayUrl
+	video.CoverUrl = record.CoverUrl
+	video.FavouriteCount = record.FavouriteCount
+	video.CommentCount = record.CommentCount
+	video.IsFavorite = true
+	video.Title = record.Title
 	return nil
 }

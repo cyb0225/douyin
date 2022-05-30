@@ -3,7 +3,6 @@
 package repository
 
 // video mesages in database table
-// 视频与用户的采用不同的设计方式了
 type Video struct {
 	Id             uint64 `gorm:"column:id"`
 	UserId		   uint64 `gorm:"column:user_id"`

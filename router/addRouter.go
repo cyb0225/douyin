@@ -2,7 +2,10 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/2103561941/douyin/controller/userctl"
+	"github.com/2103561941/douyin/controller/videoctl"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,4 +20,9 @@ func InitRouter(engine *gin.Engine) {
 	relation.POST("/action/", userctl.Follow)
 	relation.GET("/follow/list/", userctl.FollowList)
 	relation.GET("/follower/list/", userctl.FollowerList)
+
+	publish := apiRouter.Group("/publish")
+	publish.POST("/action/", videoctl.Publish)
+
+	apiRouter.StaticFS("/index", http.Dir("./video_content"))
 }

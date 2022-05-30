@@ -23,6 +23,8 @@ func InitRouter(engine *gin.Engine) {
 
 	publish := apiRouter.Group("/publish")
 	publish.POST("/action/", videoctl.Publish)
+	publish.GET("/list/", videoctl.GetPublishList)
+
 
 	apiRouter.StaticFS("/index", http.Dir("./video_content"))
 }

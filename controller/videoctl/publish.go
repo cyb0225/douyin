@@ -2,12 +2,13 @@ package videoctl
 
 import (
 	"fmt"
-	"github.com/2103561941/douyin/controller/commonctl"
-	"github.com/2103561941/douyin/service/videosvc"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"path/filepath"
 	"time"
+
+	"github.com/2103561941/douyin/controller/commonctl"
+	"github.com/2103561941/douyin/service/videosvc"
+	"github.com/gin-gonic/gin"
 )
 
 func Publish(c *gin.Context) {
@@ -42,7 +43,7 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
-	videoinfo := &videosvc.Publish_video{
+	videoinfo := &videosvc.PublishVideo{
 		UserID:  user.Id,
 		PlayURL: localhost + finalName,
 		Title:   title,

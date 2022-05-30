@@ -2,14 +2,14 @@ package videosvc
 
 import "github.com/2103561941/douyin/repository"
 
-type Publish_video struct {
+type PublishVideo struct {
 	UserID   uint64
 	PlayURL  string
 	CoverURL string
 	Title    string
 }
 
-func (video *Publish_video) PublishVideo() error {
+func (video *PublishVideo) PublishVideo() error {
 	videoinfo := &repository.Video{
 		UserId:   video.UserID,
 		PlayUrl:  video.PlayURL,

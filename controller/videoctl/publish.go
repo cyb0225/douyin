@@ -5,6 +5,7 @@ import (
 	"github.com/2103561941/douyin/service/videosvc"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/2103561941/douyin/controller/commonctl"
 	"github.com/gin-gonic/gin"
@@ -32,8 +33,8 @@ func Publish(c *gin.Context) {
 	user := commonctl.UserLoginMap[token]
 	title := c.PostForm("title")
 
-	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-	//需要判断同一用户上传同一个文件两次的情况
+	finalName := fmt.Sprintf("%d_%s_%d", user.Id, filename, time.Now().Unix())
+	//需要判断同一用户上传同一个文件两次的情况。已修改。文件名后加unix时间戳
 	saveFile := filepath.Join("./video_content/", finalName)
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{

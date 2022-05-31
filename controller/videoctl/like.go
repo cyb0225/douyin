@@ -14,7 +14,7 @@ type likeresponse struct {
 }
 
 type rawlikedata struct {
-	userID     string
+	ToUserID   string
 	videoID    string
 	actiontype string
 }
@@ -29,14 +29,15 @@ func Like(c *gin.Context) {
 		})
 		return
 	}
-
 	inputdata := rawlikedata{
-		userID:     c.Query(("user_id")),
+		ToUserID:   c.Query(("user_id")),
 		videoID:    c.Query("video_id"),
 		actiontype: c.Query("action_type"),
 	}
 
 	user, err := inputdata.converter()
+	user.UserId = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
+
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
@@ -58,7 +59,7 @@ func Like(c *gin.Context) {
 }
 
 func (data *rawlikedata) converter() (*videosvc.Like, error) {
-	user_id, err := strconv.Atoi(data.userID)
+	to_user_id, err := strconv.Atoi(data.ToUserID)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +75,7 @@ func (data *rawlikedata) converter() (*videosvc.Like, error) {
 	}
 
 	user := &videosvc.Like{
-		UserId:     uint64(user_id),
+		ToUserID:   uint64(to_user_id),
 		VideoId:    uint64(videoID),
 		ActionType: actiontype,
 	}

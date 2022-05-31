@@ -21,22 +21,21 @@ func (list *PublishList) GetLikeList() error {
 	}
 	preprocess, err := temp.SelectLikeList(video)
 
-	records := make([]*repository.Video, len(preprocess))
+	records, err := temp.SelectVideoList(preprocess)
 
-	//if len(temp) <= 0 {
-	//	return records, nil
+	//records := make([]*repository.Video, len(preprocess))
+	//
+	////if len(temp) <= 0 {
+	////	return records, nil
+	////}
+	//for i := 0; i < len(preprocess); i++ {
+	//	info := &repository.Video{}
+	//	records[i] = info
 	//}
-	for i := 0; i < len(preprocess); i++ {
-		//info := &repository.Video{}
-		//info.records[i] = info
-	}
-
 	if err != nil {
 		return err
 	}
-
 	tmpList := make([]*VideoInfo, len(records))
-
 	for i := 0; i < len(records); i++ {
 		videoInfo := &VideoInfo{}
 		if err := videoInfo.SetVideoInfo(list.UserId, records[i]); err != nil {
@@ -50,20 +49,21 @@ func (list *PublishList) GetLikeList() error {
 	return nil
 }
 
-//func (video *repository.Video) preSetVideoInfo(userId uint64, record *repository.Video) error {
-//	video.Id = record.Id
-//
-//	// get userInfo
-//	video.UserInfo.Id = record.UserId
-//	if err := video.UserInfo.SetUserInfo(userId); err != nil {
-//		return err
-//	}
-//
-//	video.PlayUrl = record.PlayUrl
-//	video.CoverUrl = record.CoverUrl
-//	video.FavouriteCount = record.FavouriteCount
-//	video.CommentCount = record.CommentCount
-//	video.IsFavorite = true
-//	video.Title = record.Title
-//	return nil
-//}
+func (video *VideoInfo) presetinfo(userId uint64, record *repository.Video) error {
+	video.Id = record.Id
+
+	// get userInfo
+
+	video.UserInfo.Id = record.UserId
+	if err := video.UserInfo.SetUserInfo(userId); err != nil {
+		return err
+	}
+
+	video.PlayUrl = record.PlayUrl
+	video.CoverUrl = record.CoverUrl
+	video.FavouriteCount = record.FavouriteCount
+	video.CommentCount = record.CommentCount
+	video.IsFavorite = true
+	video.Title = record.Title
+	return nil
+}

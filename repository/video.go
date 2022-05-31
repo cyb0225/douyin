@@ -39,10 +39,30 @@ func (video *Video) Create() error {
 func (video *Video) SelectPublishList() ([]*Video, error) {
 	var records []*Video
 
-	result := Db.Table(video.TableName()).Where("user_id = ?", video.UserId).Find(&records)
+	result := Db.Table(video.TableName()).Where("id = ?", video.Id).Find(&records)
 
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())
+	}
+
+	log.Printf("repository   %d\n", len(records))
+
+	return records, nil
+}
+
+func (video *Video) SelectVideoList(inputlist []*Video) ([]*Video, error) {
+	records := make([]*Video, len(inputlist))
+	if len(inputlist) == 0 {
+		return records, nil
+	}
+	println(len(inputlist))
+	for i := 0; i < len(inputlist); i++ {
+		info := &Video{}
+		result := Db.Table(video.TableName()).Where("id = ?", inputlist[i].Id).Find(&info)
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.New(result.Error.Error())
+		}
+		records[i] = info
 	}
 
 	log.Printf("repository   %d\n", len(records))

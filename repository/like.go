@@ -80,8 +80,9 @@ func (video *Video) SelectLikeList(like *LikeTable) ([]*Video, error) {
 
 	for i := 0; i < len(temp); i++ {
 		info := &Video{}
-		info.Swapinfo(like)
+		info.Swapinfo(temp[i])
 		records[i] = info
+		println(records[i].Id)
 	}
 
 	return records, nil

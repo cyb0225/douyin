@@ -44,7 +44,7 @@ func (action *Like) Like() error {
 		}
 	}
 	if action.ActionType == 2 { //取消点赞
-		if vidinfo.FavouriteCount == 0 {
+		if addlikeinfo.ActionType == 0 {
 			return errors.New("you can not unlike it again")
 		}
 		if err := vidinfo.UnLike(vidinfo); err != nil {
@@ -55,5 +55,6 @@ func (action *Like) Like() error {
 	if err := addlikeinfo.UpdateLike(action.ActionType); err != nil {
 		return err
 	}
+	//请查看UpdateLike函数的注释
 	return nil
 }

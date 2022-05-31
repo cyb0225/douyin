@@ -40,6 +40,12 @@ func (like *LikeTable) UpdateLike(act int) error {
 				return err
 			}
 		}
+		/*
+			这个位置的没找到就新建存在逻辑问题。如果liketable没有存储视频作者ID并配套查询的话，会出现其他用户登录后可以直接取消赞的问题。
+			如果想要在liketable省略视频作者ID的话就需要多查询一次映射或者是修改此处逻辑。
+			尽管我们的视频ID不唯一，可以通过视频ID查找到作者ID。但是我觉得效果并不好。
+		*/
+
 	}
 	if act == 2 { //如果不喜欢
 		result := Db.Table(like.TableName()).Where("user_id = ? AND to_user_id = ? AND video_id = ?", like.UserId, like.ToUserID, like.VideoId).First(like).UpdateColumn("action_type", 0)

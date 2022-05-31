@@ -57,6 +57,7 @@ func (video *VideoInfo) SetVideoInfo(userId uint64, record *repository.Video) er
 	video.Id = record.Id
 
 	// get userInfo
+	
 	video.UserInfo.Id = record.UserId
 	if err := video.UserInfo.SetUserInfo(userId); err != nil {
 		return err

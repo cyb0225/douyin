@@ -2,20 +2,21 @@ package videosvc
 
 import (
 	"errors"
+
 	"github.com/2103561941/douyin/repository"
 )
 
 type Like struct {
-	UserID     uint64
-	VideoID    uint64
+	UserId     uint64
+	VideoId    uint64
 	ActionType int
 }
 
 func (action *Like) Like() error {
 
 	vidinfo := &repository.Video{
-		UserId: action.UserID,
-		Id:     action.VideoID,
+		UserId: action.UserId,
+		Id:     action.VideoId,
 	}
 
 	if err := vidinfo.GetLikeInfo(); err != nil {
@@ -24,7 +25,7 @@ func (action *Like) Like() error {
 
 	addlikeinfo := &repository.LikeTable{
 		UserId:  vidinfo.UserId,
-		VideoID: vidinfo.Id,
+		VideoId: vidinfo.Id,
 	}
 
 	if err := addlikeinfo.GetLikeInfoinLike(); err != nil {
@@ -39,7 +40,6 @@ func (action *Like) Like() error {
 		if err := vidinfo.Like(vidinfo); err != nil {
 			return err
 		}
-
 	}
 	if action.ActionType == 2 { //取消点赞
 		if vidinfo.FavouriteCount == 0 {

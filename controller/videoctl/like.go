@@ -1,11 +1,12 @@
 package videoctl
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/2103561941/douyin/controller/commonctl"
 	"github.com/2103561941/douyin/service/videosvc"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 type likeresponse struct {
@@ -54,7 +55,6 @@ func Like(c *gin.Context) {
 			Response: commonctl.Response{Status_code: 0},
 		})
 	}
-
 }
 
 func (data *rawlikedata) converter() (*videosvc.Like, error) {
@@ -74,8 +74,8 @@ func (data *rawlikedata) converter() (*videosvc.Like, error) {
 	}
 
 	user := &videosvc.Like{
-		UserID:     uint64(user_id),
-		VideoID:    uint64(videoID),
+		UserId:     uint64(user_id),
+		VideoId:    uint64(videoID),
 		ActionType: actiontype,
 	}
 

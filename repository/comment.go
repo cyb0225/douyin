@@ -2,7 +2,7 @@ package repository
 
 import (
 	"errors"
-	"gorm.io/gorm"
+	"fmt"
 	"time"
 )
 
@@ -12,7 +12,7 @@ type CommentTable struct {
 	ToUserID    uint64    `gorm:"column:to_user_id"` //author ID
 	VideoId     uint64    `gorm:"column:video_id"`
 	CommentText string    `gorm:"column:comment_text"`
-	CommentedAt time.Time `gorm:"column:comment_time"`
+	CreatedAt   time.Time `gorm:"column:create_time"`
 }
 
 func (*CommentTable) TableName() string {
@@ -31,8 +31,13 @@ func (comment *CommentTable) Create() error {
 
 func (comment *CommentTable) Delete() error {
 	result := Db.Table(comment.TableName()).Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return errors.New(result.Error.Error())
+	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	//	return errors.New(result.Error.Error())
+	//}
+	if result.Error != nil {
+		return result.Error
+	} else if result.RowsAffected < 1 {
+		return fmt.Errorf("row with id=%d cannot be deleted because it doesn't exist", comment.Id)
 	}
 	return nil
 }

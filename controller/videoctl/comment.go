@@ -31,17 +31,15 @@ func Comment(c *gin.Context) {
 		return
 	}
 	inputdata := rawcommentdata{
-		ToUserID:     c.Query(("user_id")),
+		ToUserID:     c.Query("user_id"),
 		videoID:      c.Query("video_id"),
 		actiontype:   c.Query("action_type"),
 		comment_text: c.Query("comment_text"),
 		comment_id:   c.Query("comment_id"),
 	}
 	//------------需要调试的部分-----------------
-	var user *videosvc.Comment
-	user = new(videosvc.Comment)
+
 	user, err := inputdata.converter()
-	a := commonctl.UserLoginMap[Token].Id          // 主动去访问的用户id
 	user.UserId = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
 	println(commonctl.UserLoginMap[Token].Id)
 	if err != nil {
@@ -70,29 +68,25 @@ func (data *rawcommentdata) converter() (*videosvc.Comment, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	videoID, err := strconv.Atoi(data.videoID)
 	if err != nil {
 		return nil, err
 	}
-
 	actiontype, err := strconv.Atoi(data.actiontype)
 	if err != nil {
 		return nil, err
 	}
-
-	//if data.comment_id == "" {
-	//	//不知道有没有必要判空
-	//}
 	CommentID, err := strconv.Atoi(data.comment_id)
 	if err != nil {
-		return nil, err
+		println("correct")
 	}
+
 	user := &videosvc.Comment{
-		ToUserID:   uint64(to_user_id),
-		VideoId:    uint64(videoID),
-		ActionType: actiontype,
-		CommentID:  uint64(CommentID),
+		ToUserID:    uint64(to_user_id),
+		VideoId:     uint64(videoID),
+		ActionType:  actiontype,
+		CommentID:   uint64(CommentID),
+		CommentText: data.comment_text,
 	}
 
 	return user, nil

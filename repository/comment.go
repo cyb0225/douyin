@@ -55,3 +55,9 @@ func (comment *CommentTable) DeleteComment() error {
 	}
 	return nil
 }
+
+func (comment *CommentTable) GetCommentID() uint64 {
+	var id []uint64
+	Db.Raw("select LAST_INSERT_ID() as id from CommentTable").Pluck("id", &id)
+	return id[0]
+}

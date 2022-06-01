@@ -1,6 +1,10 @@
 package videosvc
 
-import "github.com/2103561941/douyin/repository"
+import (
+	"github.com/2103561941/douyin/repository"
+	"github.com/2103561941/douyin/service/usersvc"
+	"time"
+)
 
 type Comment struct {
 	UserId      uint64
@@ -9,6 +13,13 @@ type Comment struct {
 	ActionType  int
 	CommentText string
 	CommentID   uint64 // comment数据库的primary key
+}
+
+type CommentResponseWrapper struct {
+	CommentID   uint64
+	Userinfo    usersvc.UserInfo
+	CommentText string
+	CreateDate  string
 }
 
 func (comment *Comment) Comment() error {
@@ -51,6 +62,24 @@ func (comment *Comment) Comment() error {
 			return err
 		}
 	}
+	return nil
+}
 
+func (comment *CommentResponseWrapper) GetCommentResponse(input *Comment) error {
+	GetID := &repository.CommentTable{}
+
+	comment.CommentID = GetID.GetCommentID()
+
+	user := &usersvc.UserInfo{
+		Id: input.UserId, //评论者ID
+	}
+	if err := user.SetUserInfo(input.UserId); err != nil {
+		return err
+	}
+	comment.Userinfo = *user
+
+	comment.CommentText = input.CommentText
+	timeStr := time.Now().Format("01-02")
+	comment.CreateDate = timeStr
 	return nil
 }

@@ -4,13 +4,14 @@ import (
 	"github.com/2103561941/douyin/controller/commonctl"
 	"github.com/2103561941/douyin/service/videosvc"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
 
 type commentresponse struct {
 	commonctl.Response
-	//下面的结构体不会写
+	videosvc.CommentResponseWrapper `json:"comment"`
 }
 
 type rawcommentdata struct {
@@ -56,8 +57,18 @@ func Comment(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else {
+		inputcomment := &videosvc.Comment{
+			UserId:      user.UserId, //评论者ID
+			CommentText: user.CommentText,
+		}
+		processinfo := &videosvc.CommentResponseWrapper{}
+		if err := processinfo.GetCommentResponse(inputcomment); err != nil {
+			log.Println("commentresponsewrapper error")
+		}
+
 		c.JSON(http.StatusOK, commentresponse{
-			Response: commonctl.Response{Status_code: 0},
+			Response:               commonctl.Response{Status_code: 0},
+			CommentResponseWrapper: *processinfo,
 		})
 	}
 
@@ -78,7 +89,7 @@ func (data *rawcommentdata) converter() (*videosvc.Comment, error) {
 	}
 	CommentID, err := strconv.Atoi(data.comment_id)
 	if err != nil {
-		println("correct")
+		println("ignore this line. videoctl/comment.go/line81")
 	}
 
 	user := &videosvc.Comment{

@@ -34,5 +34,5 @@ func InitRouter(engine *gin.Engine) {
 	comment := apiRouter.Group("/comment")
 	comment.POST("/action/", videoctl.Comment)
 	comment.GET("/list/", videoctl.GetCommentList)
-
+	//
 }

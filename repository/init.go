@@ -37,6 +37,9 @@ func Init() error {
 	if err := createLikeTable(); err != nil {
 		return err
 	}
+	if err := createCommentTable(); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -75,6 +78,15 @@ func createFollowTable() error {
 func createLikeTable() error {
 
 	if err := Db.AutoMigrate(&LikeTable{}); err != nil {
+		return err
+	} // create follow table
+
+	return nil
+}
+
+func createCommentTable() error {
+
+	if err := Db.AutoMigrate(&CommentTable{}); err != nil {
 		return err
 	} // create follow table
 

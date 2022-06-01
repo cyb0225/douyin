@@ -97,3 +97,23 @@ func (video *Video) UnLike(input *Video) error {
 
 	return nil
 }
+
+func (video *Video) AddComment(input *Video) error {
+	result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("comment_count", input.CommentCount+1)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
+
+	return nil
+}
+
+func (video *Video) DelComment(input *Video) error {
+	result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("comment_count", input.CommentCount-1)
+
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
+
+	return nil
+}

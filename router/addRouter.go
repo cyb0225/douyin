@@ -30,4 +30,9 @@ func InitRouter(engine *gin.Engine) {
 	favorite := apiRouter.Group("/favorite")
 	favorite.POST("/action/", videoctl.Like)
 	favorite.GET("/list/", videoctl.GetLikeList)
+
+	comment := apiRouter.Group("/comment")
+	comment.POST("/action/", videoctl.Comment)
+	//comment.GET("/list/", videoctl.GetLikeList)
+
 }

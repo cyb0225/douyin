@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -60,4 +61,13 @@ func (comment *CommentTable) GetCommentID() uint64 {
 	var id []uint64
 	Db.Raw("select LAST_INSERT_ID() as id from CommentTable").Pluck("id", &id)
 	return id[0]
+}
+
+func (comment *CommentTable) GetCommentListRep() ([]*CommentTable, error) {
+	var temp []*CommentTable
+	result := Db.Table(comment.TableName()).Where("video_id = ?", comment.VideoId).Find(&temp)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, errors.New(result.Error.Error())
+	}
+	return temp, nil
 }

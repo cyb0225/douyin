@@ -25,7 +25,8 @@ func InitRouter(engine *gin.Engine) {
 	publish.POST("/action/", videoctl.Publish)
 	publish.GET("/list/", videoctl.GetPublishList)
 
-	apiRouter.StaticFS("/index", http.Dir("./video_content"))
+	apiRouter.StaticFS("/index/video", http.Dir("./video_content"))
+	apiRouter.StaticFS("/index/cover", http.Dir("./cover_content"))
 
 	favorite := apiRouter.Group("/favorite")
 	favorite.POST("/action/", videoctl.Like)

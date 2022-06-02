@@ -96,10 +96,10 @@ func createCommentTable() error {
 //creat a dsn string to connect to mysql
 func setDSN() string {
 	username := "root"
-	password := "070831"
+	password := "123456"
 	host := "127.0.0.1"
 	port := 3306
-	Dbname := "testsql"
+	Dbname := "douyin"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
 		username, password, host, port, Dbname)
 

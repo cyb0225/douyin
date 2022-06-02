@@ -2,6 +2,7 @@ package videoctl
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -20,6 +21,7 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
+
 	data, err := c.FormFile("data")
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -28,14 +30,15 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
-	localhost := "http://localhost:9999/douyin/index/"
-	filename := filepath.Base(data.Filename)
+
+	localhost := "http://localhost:9999/douyin/index"
+	videoFileName := filepath.Base(data.Filename)
 	user := commonctl.UserLoginMap[token]
 	title := c.PostForm("title")
 
-	finalName := fmt.Sprintf("%d_%d_%s", user.Id, time.Now().Unix(), filename)
+	finalVideoName := fmt.Sprintf("%d_%s_%d", user.Id,videoFileName, time.Now().Unix())
 	//需要判断同一用户上传同一个文件两次的情况。已修改。文件名后加unix时间戳
-	saveFile := filepath.Join("./video_content/", finalName)
+	saveFile := filepath.Join("./video_content/", finalVideoName)
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
@@ -43,9 +46,24 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
+
+	
+
+	finalCoverName, err := GetCover(finalVideoName)
+	if err != nil {
+		c.JSON(http.StatusOK, commonctl.Response{
+			Status_code: -1,
+			Status_msg:  err.Error(),
+		})
+		return
+	}
+
+	log.Println("------------------" + finalCoverName)
+
 	videoinfo := &videosvc.PublishVideo{
 		UserID:  user.Id,
-		PlayURL: localhost + finalName,
+		PlayURL: localhost + "/video/" + finalVideoName,
+		CoverURL: localhost + "/cover/" + finalCoverName,
 		Title:   title,
 	}
 
@@ -58,5 +76,4 @@ func Publish(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, commonctl.Response{Status_code: 0})
-	return
 }

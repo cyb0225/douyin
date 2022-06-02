@@ -1,8 +1,6 @@
 package videosvc
 
 import (
-	"log"
-
 	"github.com/2103561941/douyin/repository"
 	"github.com/2103561941/douyin/service/usersvc"
 )
@@ -47,27 +45,36 @@ func (list *PublishList) GetPublishList() error {
 
 	list.Videos = tmpList
 
-	log.Printf("service   %d\n", len(list.Videos))
-
 	return nil
 }
 
-// UserId 是视频的发布者，
+// UserId 是用户id
 func (video *VideoInfo) SetVideoInfo(userId uint64, record *repository.Video) error {
 	video.Id = record.Id
 
-	// get userInfo
-	
+	// get authorInfo
+
 	video.UserInfo.Id = record.UserId
 	if err := video.UserInfo.SetUserInfo(userId); err != nil {
 		return err
 	}
 
-	video.PlayUrl = record.PlayUrl
-	video.CoverUrl = record.CoverUrl
+	video.PlayUrl = SocksUrl + record.PlayUrl
+	video.CoverUrl = SocksUrl + record.CoverUrl
 	video.FavouriteCount = record.FavouriteCount
 	video.CommentCount = record.CommentCount
-	video.IsFavorite = true
+
+	like := repository.LikeTable{
+		UserId:  userId,
+		VideoId: video.Id,
+	}
+
+	if err := like.IsFavorite(); err != nil {
+		video.IsFavorite = false
+	} else {
+		video.IsFavorite = true
+	}
+
 	video.Title = record.Title
 	return nil
 }

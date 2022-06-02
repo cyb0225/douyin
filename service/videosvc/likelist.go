@@ -20,21 +20,15 @@ func (list *PublishList) GetLikeList() error {
 		UserId: list.Author,
 	}
 	preprocess, err := temp.SelectLikeList(video)
-
-	records, err := temp.SelectVideoList(preprocess)
-
-	//records := make([]*repository.Video, len(preprocess))
-	//
-	////if len(temp) <= 0 {
-	////	return records, nil
-	////}
-	//for i := 0; i < len(preprocess); i++ {
-	//	info := &repository.Video{}
-	//	records[i] = info
-	//}
 	if err != nil {
 		return err
 	}
+
+	records, err := temp.SelectVideoList(preprocess)
+	if err != nil {
+		return err
+	}
+
 	tmpList := make([]*VideoInfo, len(records))
 	for i := 0; i < len(records); i++ {
 		videoInfo := &VideoInfo{}
@@ -59,8 +53,8 @@ func (video *VideoInfo) presetinfo(userId uint64, record *repository.Video) erro
 		return err
 	}
 
-	video.PlayUrl = record.PlayUrl
-	video.CoverUrl = record.CoverUrl
+	video.PlayUrl = SocksUrl + record.PlayUrl
+	video.CoverUrl = SocksUrl + record.CoverUrl
 	video.FavouriteCount = record.FavouriteCount
 	video.CommentCount = record.CommentCount
 	video.IsFavorite = true

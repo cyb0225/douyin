@@ -93,3 +93,13 @@ func (video *Video) Swapinfo(like *LikeTable) {
 	video.Id = like.VideoId
 	video.UserId = like.UserId
 }
+
+func (like *LikeTable) IsFavorite() error {
+
+	result := Db.Table(like.TableName()).Where("user_id = ? AND video_id = ? AND action_type = ?", like.UserId, like.VideoId, 1).First(like)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return errors.New(result.Error.Error())
+	}
+
+	return nil
+}

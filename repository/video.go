@@ -71,7 +71,7 @@ func (video *Video) SelectVideoList(inputlist []*Video) ([]*Video, error) {
 }
 
 func (video *Video) GetLikeInfo() error {
-	result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video)
+	result := Db.Table(video.TableName()).Where("id = ?", video.Id).First(video)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return errors.New(result.Error.Error())
 	}
@@ -116,4 +116,18 @@ func (video *Video) DelComment(input *Video) error {
 	}
 
 	return nil
+}
+
+func (video *Video) GetvideoBefore() ([]*Video, time.Time, error) {
+	var records []*Video
+	result := Db.Table(video.TableName()).Where("create_time < ?", video.CreatedAt).Find(&records)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, time.Time{}, errors.New(result.Error.Error())
+	}
+	if len(records) == 0 {
+		return nil, time.Time{}, errors.New("NO VIDEO")
+
+	}
+	returned_video_earlist := records[0].CreatedAt //最早的视频的时间
+	return records, returned_video_earlist, nil
 }

@@ -7,8 +7,8 @@ import (
 )
 
 type Comment struct {
-	UserId      uint64
-	ToUserID    uint64
+	UserId uint64
+	//ToUserID    uint64
 	VideoId     uint64
 	ActionType  int
 	CommentText string
@@ -25,16 +25,16 @@ type CommentResponseWrapper struct {
 func (comment *Comment) Comment() error {
 
 	vidinfo := &repository.Video{
-		UserId: comment.ToUserID, //视频创作者ID
-		Id:     comment.VideoId,  //视频ID
+		//UserId: comment.ToUserID, //视频创作者ID
+		Id: comment.VideoId, //视频ID
 	}
 	if err := vidinfo.GetLikeInfo(); err != nil {
 		return err
 	}
 
 	addCommentinfo := &repository.CommentTable{
-		UserId:      comment.UserId,
-		ToUserID:    vidinfo.UserId,
+		UserId: comment.UserId,
+		//ToUserID:    vidinfo.UserId,
 		VideoId:     vidinfo.Id,
 		CommentText: comment.CommentText,
 	}

@@ -75,10 +75,10 @@ func Comment(c *gin.Context) {
 }
 
 func (data *rawcommentdata) converter() (*videosvc.Comment, error) {
-	to_user_id, err := strconv.Atoi(data.ToUserID)
-	if err != nil {
-		return nil, err
-	}
+	//to_user_id, err := strconv.Atoi(data.ToUserID)
+	//if err != nil {
+	//	return nil, err
+	//}
 	videoID, err := strconv.Atoi(data.videoID)
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func (data *rawcommentdata) converter() (*videosvc.Comment, error) {
 	}
 
 	user := &videosvc.Comment{
-		ToUserID:    uint64(to_user_id),
+		//ToUserID:    uint64(to_user_id),
 		VideoId:     uint64(videoID),
 		ActionType:  actiontype,
 		CommentID:   uint64(CommentID),

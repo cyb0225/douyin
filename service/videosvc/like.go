@@ -8,7 +8,6 @@ import (
 
 type Like struct {
 	UserId     uint64
-	ToUserID   uint64
 	VideoId    uint64
 	ActionType int
 }
@@ -16,8 +15,8 @@ type Like struct {
 func (action *Like) Like() error {
 
 	vidinfo := &repository.Video{
-		UserId: action.ToUserID,
 		Id:     action.VideoId,
+		UserId: action.UserId,
 	}
 
 	if err := vidinfo.GetLikeInfo(); err != nil {
@@ -25,9 +24,8 @@ func (action *Like) Like() error {
 	}
 
 	addlikeinfo := &repository.LikeTable{
-		UserId:   action.UserId,
-		ToUserID: vidinfo.UserId,
-		VideoId:  vidinfo.Id,
+		UserId:  action.UserId,
+		VideoId: vidinfo.Id,
 	}
 
 	if err := addlikeinfo.GetLikeInfoinLike(); err != nil {

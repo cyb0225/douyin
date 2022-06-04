@@ -14,7 +14,7 @@ type likeresponse struct {
 }
 
 type rawlikedata struct {
-	ToUserID   string
+	UserID     uint64
 	videoID    string
 	actiontype string
 }
@@ -30,7 +30,7 @@ func Like(c *gin.Context) {
 		return
 	}
 	inputdata := rawlikedata{
-		ToUserID:   c.Query(("user_id")),
+		UserID:     commonctl.UserLoginMap[Token].Id,
 		videoID:    c.Query("video_id"),
 		actiontype: c.Query("action_type"),
 	}
@@ -59,10 +59,10 @@ func Like(c *gin.Context) {
 }
 
 func (data *rawlikedata) converter() (*videosvc.Like, error) {
-	to_user_id, err := strconv.Atoi(data.ToUserID)
-	if err != nil {
-		return nil, err
-	}
+	//to_user_id, err := strconv.Atoi(data.ToUserID)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	videoID, err := strconv.Atoi(data.videoID)
 	if err != nil {
@@ -75,7 +75,6 @@ func (data *rawlikedata) converter() (*videosvc.Like, error) {
 	}
 
 	user := &videosvc.Like{
-		ToUserID:   uint64(to_user_id),
 		VideoId:    uint64(videoID),
 		ActionType: actiontype,
 	}

@@ -11,6 +11,9 @@ import (
 
 func InitRouter(engine *gin.Engine) {
 	apiRouter := engine.Group("/douyin")
+
+	apiRouter.GET("/feed", videoctl.Feed)
+
 	user := apiRouter.Group("/user")
 	user.POST("/register/", userctl.Register)
 	user.POST("/login/", userctl.Login)
@@ -35,5 +38,5 @@ func InitRouter(engine *gin.Engine) {
 	comment := apiRouter.Group("/comment")
 	comment.POST("/action/", videoctl.Comment)
 	comment.GET("/list/", videoctl.GetCommentList)
-	//
+
 }

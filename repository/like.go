@@ -9,7 +9,6 @@ import (
 type LikeTable struct {
 	Id         uint64 `gorm:"column:id"`
 	UserId     uint64 `gorm:"column:user_id; index:idx_UserId"`
-	ToUserID   uint64 `gorm:"column:to_user_id"`
 	VideoId    uint64 `gorm:"column:video_id"`
 	ActionType int    `gorm:"column:action_type"`
 }
@@ -32,7 +31,7 @@ func (like *LikeTable) Create() error {
 func (like *LikeTable) UpdateLike(act int) error {
 
 	if act == 1 { //如果喜欢
-		result := Db.Table(like.TableName()).Where("user_id = ? AND to_user_id = ? AND video_id = ?", like.UserId, like.ToUserID, like.VideoId).First(like).UpdateColumn("action_type", 1)
+		result := Db.Table(like.TableName()).Where("user_id = ? AND video_id = ?", like.UserId, like.VideoId).First(like).UpdateColumn("action_type", 1)
 
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) { //没找到就新建
 			like.ActionType = 1
@@ -48,7 +47,7 @@ func (like *LikeTable) UpdateLike(act int) error {
 
 	}
 	if act == 2 { //如果不喜欢
-		result := Db.Table(like.TableName()).Where("user_id = ? AND to_user_id = ? AND video_id = ?", like.UserId, like.ToUserID, like.VideoId).First(like).UpdateColumn("action_type", 0)
+		result := Db.Table(like.TableName()).Where("user_id = ? AND video_id = ?", like.UserId, like.VideoId).First(like).UpdateColumn("action_type", 0)
 
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return errors.New(result.Error.Error())
@@ -59,7 +58,7 @@ func (like *LikeTable) UpdateLike(act int) error {
 }
 
 func (like *LikeTable) GetLikeInfoinLike() error {
-	result := Db.Table(like.TableName()).Where("user_id = ? AND to_user_id = ? AND video_id = ?", like.UserId, like.ToUserID, like.VideoId).First(like)
+	result := Db.Table(like.TableName()).Where("user_id = ? AND video_id = ?", like.UserId, like.VideoId).First(like)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) { //没找到就新建
 		like.ActionType = 1
 		if err := like.Create(); err != nil {

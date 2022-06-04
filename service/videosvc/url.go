@@ -1,5 +1,5 @@
 package videosvc
 
 var (
-	SocksUrl = "https://179d-117-147-13-185.jp.ngrok.io"
+	SocksUrl = "http://192.168.1.6:9999"
 )

@@ -7,7 +7,7 @@ package usersvc
 
 import (
 	"errors"
-
+	"github.com/2103561941/douyin/controller/commonctl"
 	"github.com/2103561941/douyin/repository"
 )
 
@@ -80,7 +80,6 @@ func (user *UserRegister) checkPassword() error {
 // password encoding
 func (user *UserRegister) encodePassword() string {
 	// encrypted password
-	enPassword := user.Password
-
+	enPassword := commonctl.MD5(user.Password)
 	return enPassword
 }

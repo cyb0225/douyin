@@ -8,10 +8,11 @@ import (
 	"io"
 	"mime/multipart"
 
+	"github.com/2103561941/douyin/config"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
-type objectStorage struct {
+type ObjectStorage struct {
 	Endpoint        string
 	AccessKeyId     string
 	AccessKeySecret string
@@ -23,16 +24,18 @@ type objectStorage struct {
 
 // 配置个人的oss仓库信息
 var (
-	OS *objectStorage = &objectStorage{
-		Endpoint:        "oss-cn-hangzhou.aliyuncs.com",
-		AccessKeyId:     "LTAI5tHoVrRqxpd7pFXKHjq7",
-		AccessKeySecret: "5t7EpZ5rebkXLzs3dbmsaHT72kcGL6",
-		Examplebucket:   "oss-douyin-video-cover-content",
-	}
+	OS *ObjectStorage
 )
 
 // 初始化 oss 对象存储库
 func InitOss() error {
+	OS = &ObjectStorage{
+		Endpoint:        config.OSconf.Endpoint,
+		AccessKeyId:     config.OSconf.AccessKeyId,
+		AccessKeySecret: config.OSconf.AccessKeySecret,
+		Examplebucket:   config.OSconf.Examplebucket,
+	}
+
 	if err := OS.CreatStorySpace(); err != nil {
 		return err
 	}
@@ -40,7 +43,7 @@ func InitOss() error {
 }
 
 // 创建oss存储空间
-func (obj *objectStorage) CreatStorySpace() error {
+func (obj *ObjectStorage) CreatStorySpace() error {
 	// 创建OSSClient实例。
 	client, err := oss.New(obj.Endpoint, obj.AccessKeyId, obj.AccessKeySecret)
 	if err != nil {
@@ -66,13 +69,12 @@ func (obj *objectStorage) CreatStorySpace() error {
 }
 
 // 传输存储对象，保存到oss的bucket中, 保存视频
-func (obj *objectStorage) PutVideoObject(objectKey string, data *multipart.FileHeader) (string, error) {
+func (obj *ObjectStorage) PutVideoObject(objectKey string, data *multipart.FileHeader) (string, error) {
 	src, err := data.Open()
 	if err != nil {
 		return "", err
 	}
 	defer src.Close()
-
 
 	savePath := "video" + "/" + objectKey
 
@@ -87,7 +89,7 @@ func (obj *objectStorage) PutVideoObject(objectKey string, data *multipart.FileH
 }
 
 // 传输存储对象，保存到oss的bucket中, 保存封面
-func (obj *objectStorage) PutCoverObject(objectKey string, data *io.Reader) (string, error) {
+func (obj *ObjectStorage) PutCoverObject(objectKey string, data *io.Reader) (string, error) {
 
 	savePath := "cover" + "/" + objectKey
 

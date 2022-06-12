@@ -9,13 +9,14 @@ package repository
 import (
 	"fmt"
 
+	"github.com/2103561941/douyin/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var Db *gorm.DB
 
-func Init() error {
+func InitDatabase() error {
 
 	err := connectToDB()
 	if err != nil {
@@ -95,12 +96,12 @@ func createCommentTable() error {
 
 //creat a dsn string to connect to mysql
 func setDSN() string {
-	username := "root"
-	password := "123456"
-	host := "127.0.0.1"
+	username := config.DBconf.Username
+	password := config.DBconf.Password
+	host := config.DBconf.Host
 	// host := "43.142.147.229" // 云服务的ip
-	port := 3306
-	Dbname := "douyin"
+	port := config.DBconf.Port
+	Dbname := config.DBconf.Database
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
 		username, password, host, port, Dbname)
 

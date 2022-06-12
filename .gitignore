@@ -1,0 +1,3 @@
+*.exe
+.vsode
+./conf/config.yaml

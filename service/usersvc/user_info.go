@@ -48,8 +48,8 @@ func (user *UserInfo) SetUserInfo(id uint64) error {
 	user.FollowerCount = record.FollowerCount
 	user.IsFollow = user.getFollowStatus(id)
 	user.Signature = "抖音青训营-源石技艺队-No.1107"
-	user.Avatar = "https://github.com/sterben-01/sterben-01.github.io/blob/main/assets/blog_res/2022-06-10-tempimage.assets/68458315_p0.png"
-	user.Background_img = "https://github.com/sterben-01/sterben-01.github.io/blob/main/assets/blog_res/2022-06-10-tempimage.assets/61163969_p0.jpg"
+	user.Avatar = "https://sterben-01.github.io/assets/blog_res/2022-06-11-imgtemp.assets/68214616_p0.png"
+	user.Background_img = "https://sterben-01.github.io/assets/blog_res/2022-06-11-imgtemp.assets/61163969_p0.jpg"
 
 	return nil
 }

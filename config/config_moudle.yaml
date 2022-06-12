@@ -8,7 +8,7 @@
 # mysql 配置，按需修改，记得改密码
 username:   root
 password:   
-host:         127.0.0.1
+host:       43.142.147.229
 port:       3306
 database:   douyin
 

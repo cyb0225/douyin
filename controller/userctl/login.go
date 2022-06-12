@@ -27,14 +27,14 @@ func Login(c *gin.Context) {
 	}
 
 	token := commonctl.CreatToken(user.Username, user.Password)
-
+	user.Password = commonctl.MD5(user.Password)
 	if err := user.Login(); err != nil { // 登录失败
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
 			Status_msg:  err.Error(),
 		})
 	} else {
-		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{ Id: user.Id, }
+		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{Id: user.Id}
 		c.JSON(http.StatusOK, loginResponse{
 			Response: commonctl.Response{Status_code: 0},
 			Id:       user.Id,
@@ -43,3 +43,10 @@ func Login(c *gin.Context) {
 	}
 
 }
+
+//func MD5(str string) string {
+//	data := []byte(str) //切片
+//	has := md5.Sum(data)
+//	md5str := fmt.Sprintf("%x", has) //将[]byte转成16进制
+//	return md5str
+//}

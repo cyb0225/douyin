@@ -7,26 +7,20 @@ import (
 	"os"
 	"strings"
 
-	"github.com/disintegration/imaging"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
 // 截图获取封面
-func GetCover(video string) (string, error) {
+func GetCover(video string, playUrl string) (string, error) {
 	coverName := creatCoverFileName(video)
-	reader := ReadFrameAsJpeg("./video_content/" + video, 1)
-	img, err := imaging.Decode(reader)
-	if err != nil {
-		return "", err
-	}
-	err = imaging.Save(img, "./cover_content/" + coverName)
+	reader := ReadFrameAsJpeg(playUrl, 1)
+	coverUrl, err := OS.PutCoverObject(coverName, &reader)
 	if err != nil {
 		return "", err
 	}
 
-	return coverName, nil
+	return coverUrl, nil
 }
-
 
 // 参数是视频地址， 视频要截图的帧数
 func ReadFrameAsJpeg(inFileName string, frameNum int) io.Reader {

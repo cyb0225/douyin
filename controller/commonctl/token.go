@@ -16,5 +16,6 @@ var (
 
 func CreatToken(username, password string) string {
 
+	password = MD5(password)
 	return username + password
 }

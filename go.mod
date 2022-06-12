@@ -3,6 +3,7 @@ module github.com/2103561941/douyin
 go 1.18
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v2.2.4+incompatible
 	github.com/disintegration/imaging v1.6.2
 	github.com/gin-gonic/gin v1.7.7
 	github.com/u2takey/ffmpeg-go v0.4.1
@@ -11,12 +12,15 @@ require (
 
 require (
 	github.com/aws/aws-sdk-go v1.44.25 // indirect
+	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/u2takey/go-utils v0.3.1 // indirect
 	golang.org/x/image v0.0.0-20220413100746-70e8d0d3baa9 // indirect
+	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
 )
 
 require (

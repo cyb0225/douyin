@@ -8,9 +8,9 @@ import (
 )
 
 type CommentTable struct {
-	Id          uint64    `gorm:"column:id"` //comment ID
-	UserId      uint64    `gorm:"column:user_id; index:idx_UserId"`
-	ToUserID    uint64    `gorm:"column:to_user_id"` //author ID
+	Id     uint64 `gorm:"column:id"` //comment ID
+	UserId uint64 `gorm:"column:user_id; index:idx_UserId"`
+	//ToUserID    uint64    `gorm:"column:to_user_id"` //author ID
 	VideoId     uint64    `gorm:"column:video_id"`
 	CommentText string    `gorm:"column:comment_text"`
 	CreatedAt   time.Time `gorm:"column:create_time"`

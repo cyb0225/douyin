@@ -53,8 +53,8 @@ func (video *VideoInfo) presetinfo(userId uint64, record *repository.Video) erro
 		return err
 	}
 
-	video.PlayUrl = SocksUrl + record.PlayUrl
-	video.CoverUrl = SocksUrl + record.CoverUrl
+	video.PlayUrl = record.PlayUrl
+	video.CoverUrl = record.CoverUrl
 	video.FavouriteCount = record.FavouriteCount
 	video.CommentCount = record.CommentCount
 	video.IsFavorite = true

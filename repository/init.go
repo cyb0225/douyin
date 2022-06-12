@@ -98,6 +98,7 @@ func setDSN() string {
 	username := "root"
 	password := "123456"
 	host := "127.0.0.1"
+	// host := "43.142.147.229" // 云服务的ip
 	port := 3306
 	Dbname := "douyin"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",

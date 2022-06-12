@@ -59,8 +59,8 @@ func (video *VideoInfo) SetVideoInfo(userId uint64, record *repository.Video) er
 		return err
 	}
 
-	video.PlayUrl = SocksUrl + record.PlayUrl
-	video.CoverUrl = SocksUrl + record.CoverUrl
+	video.PlayUrl = record.PlayUrl
+	video.CoverUrl = record.CoverUrl
 	video.FavouriteCount = record.FavouriteCount
 	video.CommentCount = record.CommentCount
 

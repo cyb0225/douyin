@@ -44,6 +44,7 @@ func GetCommentList(c *gin.Context) {
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, Commentlistresponse{
 		Response: commonctl.Response{Status_code: 0},
 		Infos:    list.Videos,

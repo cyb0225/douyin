@@ -21,9 +21,17 @@ type inputStringData struct {
 //}
 
 func Follow(c *gin.Context) {
+	// user is not login or register
+	Token := c.Query("token")
+	if _, ok := commonctl.UserLoginMap[Token]; !ok {
+		c.JSON(http.StatusOK, commonctl.Response{
+			Status_code: -1,
+			Status_msg:  "user is not login",
+		})
+		return
+	}
 
 	inputData := inputStringData{
-		User_id:     c.Query(("user_id")),
 		To_user_id:  c.Query("to_user_id"),
 		Action_type: c.Query("action_type"),
 	}
@@ -37,16 +45,7 @@ func Follow(c *gin.Context) {
 		})
 		return
 	}
-
-	// user is not login or register
-	Token := c.Query("token")
-	if _, ok := commonctl.UserLoginMap[Token]; !ok {
-		c.JSON(http.StatusOK, commonctl.Response{
-			Status_code: -1,
-			Status_msg:  "user is not login",
-		})
-		return
-	}
+	user.User_id = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
 
 	if err := user.Follow(); err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -62,10 +61,6 @@ func Follow(c *gin.Context) {
 }
 
 func (data *inputStringData) transfromToFollow() (*usersvc.UserFollow, error) {
-	user_id, err := strconv.Atoi(data.User_id)
-	if err != nil {
-		return nil, err
-	}
 
 	to_user_id, err := strconv.Atoi(data.To_user_id)
 	if err != nil {
@@ -78,7 +73,6 @@ func (data *inputStringData) transfromToFollow() (*usersvc.UserFollow, error) {
 	}
 
 	user := &usersvc.UserFollow{
-		User_id:     uint64(user_id),
 		To_user_id:  uint64(to_user_id),
 		Action_type: action_type,
 	}

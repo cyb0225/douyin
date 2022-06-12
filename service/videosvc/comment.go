@@ -7,8 +7,8 @@ import (
 )
 
 type Comment struct {
-	UserId      uint64
-	ToUserID    uint64
+	UserId uint64
+	//ToUserID    uint64
 	VideoId     uint64
 	ActionType  int
 	CommentText string
@@ -16,25 +16,25 @@ type Comment struct {
 }
 
 type CommentResponseWrapper struct {
-	CommentID   uint64
-	Userinfo    usersvc.UserInfo
-	CommentText string
-	CreateDate  string
+	Id          uint64           `json:"id"`
+	User        usersvc.UserInfo `json:"user"`
+	Content     string           `json:"content"`
+	Create_date string           `json:"create_date"`
 }
 
 func (comment *Comment) Comment() error {
 
 	vidinfo := &repository.Video{
-		UserId: comment.ToUserID, //视频创作者ID
-		Id:     comment.VideoId,  //视频ID
+		//UserId: comment.ToUserID, //视频创作者ID
+		Id: comment.VideoId, //视频ID
 	}
 	if err := vidinfo.GetLikeInfo(); err != nil {
 		return err
 	}
 
 	addCommentinfo := &repository.CommentTable{
-		UserId:      comment.UserId,
-		ToUserID:    vidinfo.UserId,
+		UserId: comment.UserId,
+		//ToUserID:    vidinfo.UserId,
 		VideoId:     vidinfo.Id,
 		CommentText: comment.CommentText,
 	}
@@ -68,7 +68,7 @@ func (comment *Comment) Comment() error {
 func (comment *CommentResponseWrapper) GetCommentResponse(input *Comment) error {
 	GetID := &repository.CommentTable{}
 
-	comment.CommentID = GetID.GetCommentID()
+	comment.Id = GetID.GetCommentID()
 
 	user := &usersvc.UserInfo{
 		Id: input.UserId, //评论者ID
@@ -76,10 +76,10 @@ func (comment *CommentResponseWrapper) GetCommentResponse(input *Comment) error 
 	if err := user.SetUserInfo(input.UserId); err != nil {
 		return err
 	}
-	comment.Userinfo = *user
+	comment.User = *user
 
-	comment.CommentText = input.CommentText
+	comment.Content = input.CommentText
 	timeStr := time.Now().Format("01-02")
-	comment.CreateDate = timeStr
+	comment.Create_date = timeStr
 	return nil
 }

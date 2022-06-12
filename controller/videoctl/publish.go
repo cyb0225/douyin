@@ -12,6 +12,7 @@ import (
 )
 
 func Publish(c *gin.Context) {
+	// 鉴权
 	token := c.PostForm("token")
 	if _, ok := commonctl.UserLoginMap[token]; !ok {
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -21,6 +22,7 @@ func Publish(c *gin.Context) {
 		return
 	}
 
+	// 获取视频数据
 	data, err := c.FormFile("data")
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -30,17 +32,16 @@ func Publish(c *gin.Context) {
 		return
 	}
 
-	// 我们这块就不用前面的ip和端口了，到时候客户端申请url的时候我们把代理的url加上返回给他就可以
-	localhost := "/douyin/index"
-
+	// 生成视频名
 	videoFileName := filepath.Base(data.Filename)
 	user := commonctl.UserLoginMap[token]
 	title := c.PostForm("title")
-
+	//文件名后加unix时间戳
 	finalVideoName := fmt.Sprintf("%d_%d_%s", user.Id, time.Now().Unix(), videoFileName)
-	//需要判断同一用户上传同一个文件两次的情况。已修改。文件名后加unix时间戳
-	saveFile := filepath.Join("./video_content/", finalVideoName)
-	if err := c.SaveUploadedFile(data, saveFile); err != nil {
+
+	// 将数据放入到OS对象存储中
+	playUrl, err := OS.PutVideoObject(finalVideoName, data)
+	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
 			Status_msg:  err.Error(),
@@ -48,7 +49,7 @@ func Publish(c *gin.Context) {
 		return
 	}
 
-	finalCoverName, err := GetCover(finalVideoName)
+	coverUrl, err := GetCover(finalVideoName, playUrl)
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
@@ -59,8 +60,8 @@ func Publish(c *gin.Context) {
 
 	videoinfo := &videosvc.PublishVideo{
 		UserID:   user.Id,
-		PlayURL:  localhost + "/video/" + finalVideoName,
-		CoverURL: localhost + "/cover/" + finalCoverName,
+		PlayURL:  playUrl,
+		CoverURL: coverUrl,
 		Title:    title,
 	}
 

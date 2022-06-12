@@ -30,6 +30,7 @@ func (list *CommentList) GetCommentList() error {
 		}
 		tmpList[i] = videoInfo
 	}
+
 	list.Videos = tmpList
 	log.Printf("service   %d\n", len(list.Videos))
 
@@ -38,7 +39,7 @@ func (list *CommentList) GetCommentList() error {
 }
 
 func (warrper *CommentResponseWrapper) SetVideoInfo(userId uint64, record *repository.CommentTable) error {
-	warrper.CommentID = record.Id
+	warrper.Id = record.Id
 
 	tempuserinfo := &usersvc.UserInfo{
 		Id: record.UserId,
@@ -46,9 +47,9 @@ func (warrper *CommentResponseWrapper) SetVideoInfo(userId uint64, record *repos
 	if err := tempuserinfo.SetUserInfo(userId); err != nil {
 		return err
 	}
-	warrper.Userinfo = *tempuserinfo
-	warrper.CommentText = record.CommentText
+	warrper.User = *tempuserinfo
+	warrper.Content = record.CommentText
 	timeString := record.CreatedAt.Format("01-02") //2015-06-15 08:52:32
-	warrper.CreateDate = timeString
+	warrper.Create_date = timeString
 	return nil
 }

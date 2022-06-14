@@ -1,3 +1,5 @@
+// 关注列表
+
 package usersvc
 
 import (
@@ -20,7 +22,7 @@ func (list *FollowerListResponse) FollowerList() error {
 		return err
 	}
 
-	// 创建一个临时存储list的变量，防止一半报错了
+	// 创建一个临时存储list的变量，防止中途查询失败，可以即使补错
 	tmpList := make([]*UserInfo, len(records))
 
 	for i := 0; i < len(records); i++ {

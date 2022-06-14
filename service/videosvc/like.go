@@ -28,10 +28,10 @@ func (action *Like) Like() error {
 		VideoId: vidinfo.Id,
 	}
 
+	// 获取like表的信息
 	if err := addlikeinfo.GetLikeInfoinLike(); err != nil {
 		return err
 	}
-	//上面这行是获取like表的信息。
 
 	if action.ActionType == 1 { //点赞
 		if addlikeinfo.ActionType == 1 {

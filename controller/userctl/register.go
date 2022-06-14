@@ -31,7 +31,7 @@ func Register(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else { // register success
-		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{ Id: user.Id, }
+		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{Id: user.Id}
 		c.JSON(http.StatusOK, registerResponse{
 			Response: commonctl.Response{Status_code: 0},
 			Id:       user.Id,

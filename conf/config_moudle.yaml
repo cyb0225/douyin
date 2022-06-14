@@ -1,0 +1,17 @@
+# 配置文件模板
+
+
+# mysql 配置，按需修改，记得改密码
+username:   root
+password:   123456
+host:       43.142.147.229
+port:       3306
+database:   douyin
+
+# 配置oss对象存储
+endpoint:        
+accessKeyId:     
+accessKeySecret: 
+examplebucket:   oss-douyin-video-cover-content
+
+#配置完成后，重命名为 config.yaml 即可使用

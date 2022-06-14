@@ -15,23 +15,7 @@ type FeedResponse struct {
 
 func Feed(c *gin.Context) {
 	token := c.Query("token")
-	//if _, ok := commonctl.UserLoginMap[token]; !ok {
-	//	c.JSON(http.StatusOK, commonctl.Response{
-	//		Status_code: -1,
-	//		Status_msg:  "user is not login",
-	//	})
-	//	return
-	//}
 
-	//authorInt, err := strconv.Atoi(c.Query("user_id"))
-	//if err != nil {
-	//	c.JSON(http.StatusOK, commonctl.Response{
-	//		Status_code: -1,
-	//		Status_msg:  "user_id is undefined",
-	//	})
-	//	return
-	//}
-	//author := uint64(authorInt)                //被访问的用户id
 	println(c.Query("latest_time"))
 	userId := commonctl.UserLoginMap[token].Id // 主动去访问的用户id
 	list := videosvc.Feedliststruct{

@@ -9,9 +9,7 @@ type FollowListResponse struct {
 	Followers []*UserInfo
 }
 
-// 拿到登陆用户id OK
-// 通过id进行select
-// 结果传回
+
 func (list *FollowListResponse) FollowList() error {
 
 	status := &repository.Follow{
@@ -23,8 +21,8 @@ func (list *FollowListResponse) FollowList() error {
 		return err
 	}
 
-	// 创建一个临时存储list的变量，防止一半报错了
-	tmpList :=  make([]*UserInfo, len(records))
+	// 创建一个临时存储list的变量，防止查询部分数据失败，获取不了完整的list数据
+	tmpList := make([]*UserInfo, len(records))
 
 	for i := 0; i < len(records); i++ {
 		userInfo := &UserInfo{

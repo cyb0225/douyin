@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+
 func MD5(str string) string {
 	data := []byte(str) //切片
 	has := md5.Sum(data)

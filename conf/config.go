@@ -1,4 +1,6 @@
-// // 加载使用config文件
+// 加载、读取用户配置的config文件
+
+
 package config
 
 import (
@@ -11,7 +13,7 @@ import (
 type DataBaseConfig struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
-	Host       string `yaml:"host"`
+	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
 	Database string `yaml:"database"`
 }
@@ -28,20 +30,21 @@ var (
 	OSconf ObjectStorageConfig
 )
 
-func InitConfig() error{
-	configFile, err := ioutil.ReadFile("./config/config.yaml")
+func InitConfig() error {
+	configFile, err := ioutil.ReadFile("./conf/config.yaml")
 	if err != nil {
 		return err
 	}
+	// 读取mysql数据库信息
 	if err := yaml.Unmarshal(configFile, &DBconf); err != nil {
 		return err
 	}
 
+	// 读取oss对象存储信息
 	if err := yaml.Unmarshal(configFile, &OSconf); err != nil {
 		return err
 	}
-	log.Println(DBconf)
-	log.Println(OSconf)
+
 	log.Println("configured successfully")
 	return nil
 }

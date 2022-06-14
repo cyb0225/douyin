@@ -26,7 +26,7 @@ func (*Video) TableName() string {
 	return "video"
 }
 
-func (video *Video) Create() error {
+func (video *Video) Insert() error {
 	if err := Db.Table(video.TableName()).Create(&video).Error; err != nil {
 		return errors.New("Insert to UserDatabase -- video tabel error")
 	}

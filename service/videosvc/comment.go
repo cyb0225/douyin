@@ -22,6 +22,7 @@ type CommentResponseWrapper struct {
 	Create_date string           `json:"create_date"`
 }
 
+
 func (comment *Comment) Comment() error {
 
 	vidinfo := &repository.Video{
@@ -65,6 +66,7 @@ func (comment *Comment) Comment() error {
 	return nil
 }
 
+
 func (comment *CommentResponseWrapper) GetCommentResponse(input *Comment) error {
 	GetID := &repository.CommentTable{}
 
@@ -79,7 +81,7 @@ func (comment *CommentResponseWrapper) GetCommentResponse(input *Comment) error 
 	comment.User = *user
 
 	comment.Content = input.CommentText
-	timeStr := time.Now().Format("01-02")
+	timeStr := time.Now().Format("01-02") // 时间格式修改
 	comment.Create_date = timeStr
 	return nil
 }

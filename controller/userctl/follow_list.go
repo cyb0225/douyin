@@ -51,7 +51,7 @@ func FollowList(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, FollowListResponse{
-		Response: commonctl.Response{ Status_code: 0},
+		Response:  commonctl.Response{Status_code: 0},
 		Followers: inputData.Followers,
 	})
 }

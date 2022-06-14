@@ -1,7 +1,5 @@
-// login
-// check if username exists
-// check if password is right
-// return user_id
+// 用户登录
+
 package usersvc
 
 import (
@@ -16,7 +14,7 @@ type UserLogin struct {
 	Password string
 }
 
-// login
+
 func (user *UserLogin) Login() error {
 
 	record := &repository.User{

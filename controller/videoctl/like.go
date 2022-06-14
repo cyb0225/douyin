@@ -59,10 +59,6 @@ func Like(c *gin.Context) {
 }
 
 func (data *rawlikedata) converter() (*videosvc.Like, error) {
-	//to_user_id, err := strconv.Atoi(data.ToUserID)
-	//if err != nil {
-	//	return nil, err
-	//}
 
 	videoID, err := strconv.Atoi(data.videoID)
 	if err != nil {

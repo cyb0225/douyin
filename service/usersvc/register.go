@@ -1,7 +1,4 @@
-// register
-// check username and password's length and legality
-// store password after encode
-// return uesr_id
+// 用户注册
 
 package usersvc
 

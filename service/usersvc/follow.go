@@ -1,3 +1,5 @@
+// 关注操作
+
 package usersvc
 
 import (
@@ -13,9 +15,11 @@ type UserFollow struct {
 	Action_type int
 }
 
+
+// 关注action
 const (
-	Not_Followed int = 0
-	Followed     int = 1
+	Not_Followed int = 0  
+	Followed     int = 1  
 	Undefined    int = -1
 )
 

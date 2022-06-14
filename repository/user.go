@@ -1,4 +1,4 @@
-// store userinfos and related CRUD interface
+// 用户信息
 
 package repository
 
@@ -8,9 +8,9 @@ import (
 	"gorm.io/gorm"
 )
 
-// user mesages in database table
+
 type User struct {
-	Id            uint64 `gorm:"column:id"` //5.28 update typo
+	Id            uint64 `gorm:"column:id"`
 	Username      string `gorm:"column:username"`
 	Password      string `gorm:"column:password"`
 	FollowCount   uint64 `gorm:"follow_count"`
@@ -21,6 +21,7 @@ func (*User) TableName() string {
 	return "user"
 }
 
+// 插入数据
 func (user *User) Insert() error {
 
 	//insert error
@@ -59,7 +60,7 @@ func (user *User) SelectByUserId() error {
 
 // updata user follow_count by add n
 func (user *User) UpdataFollowCount(n int) error {
-	result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follow_count", int(user.FollowCount) + n)
+	result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follow_count", int(user.FollowCount)+n)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return result.Error
 	}
@@ -69,7 +70,7 @@ func (user *User) UpdataFollowCount(n int) error {
 
 // updata user follower_count by add n
 func (user *User) UpdataFollowerCount(n int) error {
-	result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follower_count", int(user.FollowerCount) + n)
+	result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follower_count", int(user.FollowerCount)+n)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return result.Error
 	}

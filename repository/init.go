@@ -1,15 +1,11 @@
-// init repository
-/*
-TO connect to mysql
-   creat user table and video table
-*/
+// 连接数据库，创建相关表
 
 package repository
 
 import (
 	"fmt"
 
-	"github.com/2103561941/douyin/config"
+	"github.com/2103561941/douyin/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -18,26 +14,33 @@ var Db *gorm.DB
 
 func InitDatabase() error {
 
+	// 连接数据库
 	err := connectToDB()
 	if err != nil {
 		return err
 	}
 
+	// 创建用户表
 	if err := createUserTable(); err != nil {
 		return err
 	}
 
+	// 创建视频表
 	if err := createVideoTable(); err != nil {
 		return err
 	}
 
+	// 创建关注表
 	if err := createFollowTable(); err != nil {
 		return err
 	}
 
+	// 创建点赞表
 	if err := createLikeTable(); err != nil {
 		return err
 	}
+	
+	// 创建评论表
 	if err := createCommentTable(); err != nil {
 		return err
 	}
@@ -47,6 +50,7 @@ func InitDatabase() error {
 
 //----------------------------------------------------------------------------------------------------------------
 
+// 创建关注表
 func createUserTable() error {
 
 	// creat usertable by User struct
@@ -57,6 +61,7 @@ func createUserTable() error {
 	return nil
 }
 
+// 创建视频表
 func createVideoTable() error {
 
 	// creat videotable by User struct
@@ -67,6 +72,7 @@ func createVideoTable() error {
 	return nil
 }
 
+// 创建关注表
 func createFollowTable() error {
 
 	if err := Db.AutoMigrate(&Follow{}); err != nil {
@@ -76,6 +82,7 @@ func createFollowTable() error {
 	return nil
 }
 
+// 创建点赞表
 func createLikeTable() error {
 
 	if err := Db.AutoMigrate(&LikeTable{}); err != nil {
@@ -85,6 +92,7 @@ func createLikeTable() error {
 	return nil
 }
 
+// 创建评论表
 func createCommentTable() error {
 
 	if err := Db.AutoMigrate(&CommentTable{}); err != nil {
@@ -94,12 +102,12 @@ func createCommentTable() error {
 	return nil
 }
 
-//creat a dsn string to connect to mysql
+
+// 创建mysql dsn字符串，用于连接mysql服务器
 func setDSN() string {
 	username := config.DBconf.Username
 	password := config.DBconf.Password
 	host := config.DBconf.Host
-	// host := "43.142.147.229" // 云服务的ip
 	port := config.DBconf.Port
 	Dbname := config.DBconf.Database
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -108,9 +116,9 @@ func setDSN() string {
 	return dsn
 }
 
-//connect to database and return a DB
+// 连接数据库
 func connectToDB() error {
-	// connect to mysql by dsn
+	
 	dsn := setDSN()
 	var err error
 	if Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{}); err != nil {

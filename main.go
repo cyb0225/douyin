@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/2103561941/douyin/config" // 加载配置文件
+	"github.com/2103561941/douyin/conf"
 	"github.com/2103561941/douyin/controller/videoctl"
 	"github.com/2103561941/douyin/repository"
 	"github.com/2103561941/douyin/router"
@@ -9,24 +9,23 @@ import (
 )
 
 func main() {
-	// 配置导入
+	// 导入配置
 	if err := config.InitConfig(); err != nil {
 		panic(err.Error())
 	}
 
-	// 数据库初始化
+	// 连接数据库，创建表
 	if err := repository.InitDatabase(); err != nil {
 		panic(err.Error())
 	}
 
-	// 对象存储初始化
+	// 连接oss对象存储
 	if err := videoctl.InitOss(); err != nil {
 		panic(err.Error())
 	}
 
-	// 开启服务
-	r := gin.Default()
-	router.InitRouter(r)
-
-	r.Run(":9999")
+	// 开启路由服务
+	engine := gin.Default()
+	router.InitRouter(engine)
+	engine.Run(":3333")
 }

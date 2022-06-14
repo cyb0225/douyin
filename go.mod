@@ -13,6 +13,7 @@ require (
 require (
 	github.com/aws/aws-sdk-go v1.44.25 // indirect
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
+	github.com/garyburd/redigo v1.6.3 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

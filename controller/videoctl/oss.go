@@ -8,7 +8,7 @@ import (
 	"io"
 	"mime/multipart"
 
-	"github.com/2103561941/douyin/config"
+	"github.com/2103561941/douyin/conf"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
@@ -50,11 +50,15 @@ func (obj *ObjectStorage) CreatStorySpace() error {
 		return err
 	}
 	// 创建名为examplebucket的存储空间，并设置存储类型为标准存储类型、读写权限ACL为公共读oss.ACLPublicRead、数据容灾类型为同城冗余存储oss.RedundancyZRS。
-	err = client.CreateBucket(obj.Examplebucket, oss.StorageClass(oss.StorageStandard), oss.ACL(oss.ACLPublicRead), oss.RedundancyType(oss.RedundancyZRS))
+	err = client.CreateBucket(obj.Examplebucket, 
+							  oss.StorageClass(oss.StorageStandard),
+							  oss.ACL(oss.ACLPublicRead), 
+							  oss.RedundancyType(oss.RedundancyZRS))
 	if err != nil {
 		return err
 	}
 
+	// 获取bucket
 	bucket, err := client.Bucket(obj.Examplebucket)
 	if err != nil {
 		return err
@@ -63,6 +67,8 @@ func (obj *ObjectStorage) CreatStorySpace() error {
 	obj.Client = client
 	obj.Bucket = bucket
 
+
+	// 返回的url， 阿里云oss对象存储基本框架就是这个
 	obj.Url = "https://" + obj.Bucket.BucketName + "." + obj.Endpoint + "/"
 
 	return nil

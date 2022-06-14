@@ -6,6 +6,8 @@ import (
 	"github.com/2103561941/douyin/repository"
 	"github.com/2103561941/douyin/router"
 	"github.com/gin-gonic/gin"
+
+	"github.com/gin-contrib/pprof"
 )
 
 func main() {
@@ -27,5 +29,10 @@ func main() {
 	// 开启路由服务
 	engine := gin.Default()
 	router.InitRouter(engine)
+
+	// 注册pprof的路由
+	pprof.Register(engine) 
+	
 	engine.Run(":9999")
+
 }

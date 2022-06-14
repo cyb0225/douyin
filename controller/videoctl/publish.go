@@ -36,6 +36,7 @@ func Publish(c *gin.Context) {
 	videoFileName := filepath.Base(data.Filename)
 	user := commonctl.UserLoginMap[token]
 	title := c.PostForm("title")
+
 	//文件名后加unix时间戳
 	finalVideoName := fmt.Sprintf("%d_%d_%s", user.Id, time.Now().Unix(), videoFileName)
 
@@ -49,6 +50,7 @@ func Publish(c *gin.Context) {
 		return
 	}
 
+	// 获取保存封面的url
 	coverUrl, err := GetCover(finalVideoName, playUrl)
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{

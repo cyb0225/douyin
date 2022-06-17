@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"sync"
 
 	"gorm.io/gorm"
 )
@@ -21,19 +22,24 @@ func (*LikeTable) TableName() string {
 // 插入数据
 func (like *LikeTable) Insert() error {
 	like.ActionType = 0
-	if err := Db.Table(like.TableName()).Create(&like).Error; err != nil {
-		return errors.New("Insert to UserDatabase -- like tabel error")
-	}
 
-	err := Db.Migrator().HasIndex(&LikeTable{}, "idx_UserId")
-	println(err)
+	var mutex sync.Mutex
+	mutex.Lock()
+	tx := Db.Begin()
+	if err := tx.Table(like.TableName()).Create(&like).Error; err != nil {
+		tx.Rollback()
+		return errors.New("update follow count error, roll backed")
+
+	}
+	tx.Commit()
+	mutex.Unlock()
+
 	return nil
 }
 
 // 更新用户喜欢数据
 func (like *LikeTable) UpdateLike(act int) error {
-
-	// 对喜欢数据的逻辑处理
+	//这块不能用事务。因为要通过报错新建。而且新建已经用事务了
 	if act == 1 { //如果喜欢
 		result := Db.Table(like.TableName()).Where("user_id = ? AND video_id = ?", like.UserId, like.VideoId).First(like).UpdateColumn("action_type", 1)
 
@@ -59,6 +65,7 @@ func (like *LikeTable) UpdateLike(act int) error {
 
 // 获取
 func (like *LikeTable) GetLikeInfoinLike() error {
+	//这块不能用事务。因为要通过报错新建。而且新建已经用事务了
 	result := Db.Table(like.TableName()).Where("user_id = ? AND video_id = ?", like.UserId, like.VideoId).First(like)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) { //未找到就新建
 		like.ActionType = 1

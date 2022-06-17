@@ -124,14 +124,14 @@ func (follow *UserFollow) changeUsrFollowCount() error {
 	user := repository.User{
 		Id: follow.User_id,
 	}
-	if err := user.UpdataFollowCount(n); err != nil {
+	if err := user.UpdateFollowCount(n); err != nil {
 		return err
 	}
 
 	to_user := repository.User{
 		Id: follow.To_user_id,
 	}
-	if err := to_user.UpdataFollowerCount(n); err != nil {
+	if err := to_user.UpdateFollowerCount(n); err != nil {
 		return err
 	}
 

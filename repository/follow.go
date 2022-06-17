@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"sync"
 
 	"gorm.io/gorm"
 )
@@ -18,11 +19,23 @@ func (*Follow) TableName() string {
 }
 
 func (user *Follow) Insert() error {
+
 	user.Status = 0
-	if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
-		return errors.New("Insert to UserDatabase -- Follow tabel error")
+	var mutex sync.Mutex
+	mutex.Lock()
+	tx := Db.Begin()
+	if err := tx.Table(user.TableName()).Create(&user).Error; err != nil {
+		tx.Rollback()
+		return errors.New("Insert to UserDatabase -- Follow tabel error, roll backed")
 	}
-	err := Db.Migrator().HasIndex(&Follow{}, "idx_UserId")
+	tx.Commit()
+	mutex.Unlock()
+
+	//user.Status = 0
+	//if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
+	//	return errors.New("Insert to UserDatabase -- Follow tabel error")
+	//}
+	err := tx.Migrator().HasIndex(&Follow{}, "idx_UserId")
 	println(err)
 	return nil
 
@@ -43,16 +56,28 @@ func (user *Follow) Select() error {
 
 // updata follow status
 func (user *Follow) UpdateStatus(newStatus int) error {
-	result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user).UpdateColumn("status", newStatus)
 
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return errors.New(result.Error.Error())
+	var mutex sync.Mutex
+	mutex.Lock()
+	tx := Db.Begin()
+	if err := tx.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user).UpdateColumn("status", newStatus).Error; err != nil {
+		tx.Rollback()
+		return errors.New("update follow status error, roll backed")
 	}
+	tx.Commit()
+	mutex.Unlock()
+	//
+	//
+	//result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user).UpdateColumn("status", newStatus)
+	//
+	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	//	return errors.New(result.Error.Error())
+	//}
 
 	return nil
 }
 
-// use to go back 
+// use to go back
 func (user *Follow) Undo(follow *Follow) error {
 	result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user).UpdateColumn("status", follow.Status)
 
@@ -62,7 +87,6 @@ func (user *Follow) Undo(follow *Follow) error {
 
 	return nil
 }
-
 
 /*
 	SELECT * from follow

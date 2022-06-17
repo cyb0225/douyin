@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
+	"sync"
 	"time"
 )
 
@@ -21,25 +22,48 @@ func (*CommentTable) TableName() string {
 }
 
 func (comment *CommentTable) Create() error {
-	if err := Db.Table(comment.TableName()).Create(&comment).Error; err != nil {
-		return errors.New("Insert to UserDatabase -- comment tabel error")
-	}
 
-	err := Db.Migrator().HasIndex(&CommentTable{}, "idx_UserId")
+	var mutex sync.Mutex
+	mutex.Lock()
+	tx := Db.Begin()
+	if err := tx.Table(comment.TableName()).Create(&comment).Error; err != nil {
+		tx.Rollback()
+		return errors.New("Insert to UserDatabase -- comment tabel error, roll backed")
+	}
+	tx.Commit()
+	mutex.Unlock()
+
+	//
+	//if err := Db.Table(comment.TableName()).Create(&comment).Error; err != nil {
+	//	return errors.New("Insert to UserDatabase -- comment tabel error")
+	//}
+
+	err := tx.Migrator().HasIndex(&CommentTable{}, "idx_UserId")
 	println(err)
 	return nil
 }
 
 func (comment *CommentTable) Delete() error {
-	result := Db.Table(comment.TableName()).Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment)
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return errors.New(result.Error.Error())
-	//}
-	if result.Error != nil {
-		return result.Error
-	} else if result.RowsAffected < 1 {
+
+	var mutex sync.Mutex
+	mutex.Lock()
+	tx := Db.Begin()
+	if err := tx.Table(comment.TableName()).Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment).Error; err != nil {
+		tx.Rollback()
 		return fmt.Errorf("row with id=%d cannot be deleted because it doesn't exist", comment.Id)
 	}
+	tx.Commit()
+	mutex.Unlock()
+
+	//result := Db.Table(comment.TableName()).Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment)
+	////if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	////	return errors.New(result.Error.Error())
+	////}
+	//if result.Error != nil {
+	//	return result.Error
+	//} else if result.RowsAffected < 1 {
+	//	return fmt.Errorf("row with id=%d cannot be deleted because it doesn't exist", comment.Id)
+	//}
 	return nil
 }
 

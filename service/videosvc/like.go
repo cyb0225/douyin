@@ -40,14 +40,15 @@ func (action *Like) Like() error {
 		if err := vidinfo.Like(vidinfo); err != nil {
 			return err
 		}
-	}
-	if action.ActionType == 2 { //取消点赞
+	} else if action.ActionType == 2 { //取消点赞
 		if addlikeinfo.ActionType == 0 {
 			return errors.New("you can not unlike it again")
 		}
 		if err := vidinfo.UnLike(vidinfo); err != nil {
 			return err
 		}
+	} else {
+		return errors.New("invalid like action")
 	}
 
 	if err := addlikeinfo.UpdateLike(action.ActionType); err != nil {

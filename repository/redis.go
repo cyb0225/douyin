@@ -18,7 +18,6 @@ func InitRedis() (err error) {
     }
 
 	log.Println("redis connect successfully")
-	
 
 	return nil
 }

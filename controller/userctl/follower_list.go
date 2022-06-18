@@ -27,16 +27,16 @@ func FollowerList(c *gin.Context) {
 	}
 	toUserId := uint64(toUserIdInt) //对象ID
 
-	// Determine if the user is logged in
-	token := c.Query("token")
-
-	if _, ok := commonctl.UserLoginMap[token]; !ok {
-		c.JSON(http.StatusOK, commonctl.Response{
-			Status_code: -1,
-			Status_msg:  "user is not login",
-		})
-		return
-	}
+	//Determine if the user is logged in
+	//token := c.Query("token")
+	//
+	//if _, ok := commonctl.UserLoginMap[token]; !ok {
+	//	c.JSON(http.StatusOK, commonctl.Response{
+	//		Status_code: -1,
+	//		Status_msg:  "user is not login",
+	//	})
+	//	return
+	//}
 
 	inputData := &usersvc.FollowerListResponse{
 		ToUserId: toUserId,

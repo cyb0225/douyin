@@ -32,10 +32,6 @@ func (user *Follow) Insert() error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//user.Status = 0
-	//if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
-	//	return errors.New("Insert to UserDatabase -- Follow tabel error")
-	//}
 	err := tx.Migrator().HasIndex(&Follow{}, "idx_UserId")
 	println(err)
 	return nil
@@ -67,13 +63,6 @@ func (user *Follow) UpdateStatus(newStatus int) error {
 	}
 	tx.Commit()
 	mutex.Unlock()
-	//
-	//
-	//result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user).UpdateColumn("status", newStatus)
-	//
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return errors.New(result.Error.Error())
-	//}
 
 	return nil
 }
@@ -89,12 +78,6 @@ func (user *Follow) Undo(follow *Follow) error {
 	return nil
 }
 
-/*
-	SELECT * from follow
-	WHERE
-	user_id = id,
-	status = 1
-*/
 func (user *Follow) GetFollowList() ([]*Follow, error) {
 	var records []*Follow
 	result := Db.Table(user.TableName()).Where("user_id = ? AND status = ?", user.UserId, 1).Find(&records)

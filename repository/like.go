@@ -34,25 +34,6 @@ func (like *LikeTable) Insert() error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(like.TableName()).Create(&like).Error; err != nil {
-	//		return errors.New("update follow count error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
-	//return nil
-	//
-	//if err := Db.Table(like.TableName()).Create(&like).Error; err != nil {
-	//	return errors.New("Insert to UserDatabase -- like tabel error")
-	//}
-	//err = Db.Migrator().HasIndex(&LikeTable{}, "idx_UserId")
-	//println(err)
 	return nil
 }
 

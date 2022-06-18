@@ -34,11 +34,6 @@ func (comment *CommentTable) Create() error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//
-	//if err := Db.Table(comment.TableName()).Create(&comment).Error; err != nil {
-	//	return errors.New("Insert to UserDatabase -- comment tabel error")
-	//}
-
 	err := tx.Migrator().HasIndex(&CommentTable{}, "idx_UserId")
 	println(err)
 	return nil
@@ -56,21 +51,12 @@ func (comment *CommentTable) Delete() error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//result := Db.Table(comment.TableName()).Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment)
-	////if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	////	return errors.New(result.Error.Error())
-	////}
-	//if result.Error != nil {
-	//	return result.Error
-	//} else if result.RowsAffected < 1 {
-	//	return fmt.Errorf("row with id=%d cannot be deleted because it doesn't exist", comment.Id)
-	//}
 	return nil
 }
 
 // 插入评论数据
 func (comment *CommentTable) AddComment() error {
-	if err := comment.insert(); err != nil {
+	if err := comment.Create(); err != nil {
 		return err
 	}
 	return nil
@@ -78,7 +64,7 @@ func (comment *CommentTable) AddComment() error {
 
 // 删除评论数据
 func (comment *CommentTable) DeleteComment() error {
-	if err := comment.delete(); err != nil {
+	if err := comment.Delete(); err != nil {
 		return err
 	}
 	return nil
@@ -103,28 +89,3 @@ func (comment *CommentTable) GetCommentListRep() ([]*CommentTable, error) {
 	return temp, nil
 }
 
-// -------------------------------------------------------------------------------------------------------------------
-// 插入数据
-func (comment *CommentTable) insert() error {
-	if err := Db.Table(comment.TableName()).Create(&comment).Error; err != nil {
-		return errors.New("Insert to UserDatabase -- comment tabel error")
-	}
-
-	// err := Db.Migrator().HasIndex(&CommentTable{}, "idx_UserId")
-	// println(err)
-
-	return nil
-}
-
-// 删除数据
-func (comment *CommentTable) delete() error {
-	result := Db.Table(comment.TableName()).
-	Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment)
-
-	if result.Error != nil {
-		return result.Error
-	} else if result.RowsAffected < 1 {
-		return fmt.Errorf("row with id=%d cannot be deleted because it doesn't exist", comment.Id)
-	}
-	return nil
-}

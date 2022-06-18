@@ -34,20 +34,7 @@ func (user *User) Insert() error {
 	}
 	tx.Commit()
 	mutex.Unlock()
-	//
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//	//if err := Db.Table(user.TableName()).Create(&user).Error; err != nil {
-	//	//	return errors.New("Insert to UserDatabase error")
-	//	//}
-	//	if err := tx.Table(user.TableName()).Create(&user).Error; err != nil {
-	//		return errors.New("Insert to UserDatabase error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
+
 	return nil
 }
 
@@ -93,23 +80,7 @@ func (user *User) UpdateFollowCount(n int) error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follow_count", int(user.FollowCount)+n).Error; err != nil {
-	//		return errors.New("update follow count error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
 	return nil
-	//
-	//result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follow_count", int(user.FollowCount)+n)
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return result.Error
-	//}
 
 }
 
@@ -130,23 +101,4 @@ func (user *User) UpdateFollowerCount(n int) error {
 	mutex.Unlock()
 	return nil
 
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follower_count", int(user.FollowerCount)+n).Error; err != nil {
-	//		return errors.New("update follower count error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
-	//return nil
-
-	//result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user).Update("follower_count", int(user.FollowerCount)+n)
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return result.Error
-	//}
-	//
-	//return nil
 }

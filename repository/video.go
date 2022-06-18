@@ -42,27 +42,8 @@ func (video *Video) Create() error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(video.TableName()).Create(&video).Error; err != nil {
-	//		return errors.New("Insert to UserDatabase -- video tabel error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
 	return nil
 
-	//if err := Db.Table(video.TableName()).Create(&video).Error; err != nil {
-	//	return errors.New("Insert to UserDatabase -- video tabel error")
-	//}
-	//
-	//err := Db.Migrator().HasIndex(&Video{}, "idx_UserId")
-	//println(err)
-	//return nil
 }
 
 func (video *Video) SelectPublishList() ([]*Video, error) {
@@ -124,26 +105,6 @@ func (video *Video) Like(input *Video) error {
 
 	return nil
 
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("favourite_count", input.FavouriteCount+1).Error; err != nil {
-	//		return errors.New("update like info error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
-	//return nil
-
-	//result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("favourite_count", input.FavouriteCount+1)
-	//
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return errors.New(result.Error.Error())
-	//}
-	//
-	//return nil
 }
 
 func (video *Video) UnLike(input *Video) error {
@@ -160,24 +121,6 @@ func (video *Video) UnLike(input *Video) error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("favourite_count", input.FavouriteCount-1).Error; err != nil {
-	//		return errors.New("update unlike info error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
-
-	//result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("favourite_count", input.FavouriteCount-1)
-	//
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return errors.New(result.Error.Error())
-	//}
-	//
 	return nil
 }
 
@@ -194,25 +137,6 @@ func (video *Video) AddComment(input *Video) error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("comment_count", input.CommentCount+1).Error; err != nil {
-	//		return errors.New("add comment count error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
-
-	//result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("comment_count", input.CommentCount+1)
-	//
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return errors.New(result.Error.Error())
-	//}
-	//
 	return nil
 }
 
@@ -229,27 +153,6 @@ func (video *Video) DelComment(input *Video) error {
 	tx.Commit()
 	mutex.Unlock()
 
-	//
-	//
-	//
-	//err := Db.Transaction(func(tx *gorm.DB) error {
-	//
-	//	if err := tx.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("comment_count", input.CommentCount-1).Error; err != nil {
-	//		return errors.New("delete comment count error")
-	//
-	//	}
-	//	return nil
-	//})
-	//if err != nil {
-	//	return err
-	//}
-
-	//result := Db.Table(video.TableName()).Where("user_id = ? AND id = ?", video.UserId, video.Id).First(video).UpdateColumn("comment_count", input.CommentCount-1)
-	//
-	//if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-	//	return errors.New(result.Error.Error())
-	//}
-	//
 	return nil
 }
 

@@ -17,7 +17,7 @@ func (video *PublishVideo) PublishVideo() error {
 		Title:    video.Title,
 	}
 
-	if err := videoinfo.Insert(); err != nil {
+	if err := videoinfo.Create(); err != nil {
 		return err
 	}
 

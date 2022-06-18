@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"gorm.io/gorm"
+	"sync"
 	"time"
 )
 
@@ -21,6 +22,37 @@ func (*CommentTable) TableName() string {
 	return "CommentTable"
 }
 
+func (comment *CommentTable) Create() error {
+
+	var mutex sync.Mutex
+	mutex.Lock()
+	tx := Db.Begin()
+	if err := tx.Table(comment.TableName()).Create(&comment).Error; err != nil {
+		tx.Rollback()
+		return errors.New("Insert to UserDatabase -- comment tabel error, roll backed")
+	}
+	tx.Commit()
+	mutex.Unlock()
+
+	err := tx.Migrator().HasIndex(&CommentTable{}, "idx_UserId")
+	println(err)
+	return nil
+}
+
+func (comment *CommentTable) Delete() error {
+
+	var mutex sync.Mutex
+	mutex.Lock()
+	tx := Db.Begin()
+	if err := tx.Table(comment.TableName()).Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment).Error; err != nil {
+		tx.Rollback()
+		return fmt.Errorf("row with id=%d cannot be deleted because it doesn't exist", comment.Id)
+	}
+	tx.Commit()
+	mutex.Unlock()
+
+	return nil
+}
 
 // 插入评论数据
 func (comment *CommentTable) AddComment() error {

@@ -2,50 +2,48 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/2103561941/douyin/controller/userctl"
 	"github.com/2103561941/douyin/controller/videoctl"
+	"github.com/2103561941/douyin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter(engine *gin.Engine) {
-	
+
 	// 主页面
 	apiRouter := engine.Group("/douyin")
+	apiRouter.POST("/user/register/", userctl.Register)
+	apiRouter.POST("/user/login/", userctl.Login)
+	{
+		JWT := engine.Group("/douyin", middleware.JWTToken())
+		JWT.GET("/feed", videoctl.Feed)
 
-	apiRouter.GET("/feed", videoctl.Feed)
+		// 用户
+		//apiRouter.POST("/user/register/", userctl.Register)
+		//apiRouter.POST("/user/login/", userctl.Login)
+		JWT.GET("/user/", userctl.GetUserInfo)
 
-	// 用户
-	user := apiRouter.Group("/user")
-	user.POST("/register/", userctl.Register)
-	user.POST("/login/", userctl.Login)
-	user.GET("/", userctl.GetUserInfo)
+		// 关注
+		JWT.POST("/relation/action/", userctl.Follow)
+		JWT.GET("/relation/follow/list/", userctl.FollowList)
+		JWT.GET("/relation/follower/list/", userctl.FollowerList)
 
-	// 关注
-	relation := apiRouter.Group(("/relation"))
-	relation.POST("/action/", userctl.Follow)
-	relation.GET("/follow/list/", userctl.FollowList)
-	relation.GET("/follower/list/", userctl.FollowerList)
+		// 投稿
+		JWT.POST("/publish/action/", videoctl.Publish)
+		JWT.GET("/publish/list/", videoctl.GetPublishList)
 
-	// 投稿
-	publish := apiRouter.Group("/publish")
-	publish.POST("/action/", videoctl.Publish)
-	publish.GET("/list/", videoctl.GetPublishList)
+		//apiRouter.StaticFS("/index/video", http.Dir("./video_content"))
+		//apiRouter.StaticFS("/index/cover", http.Dir("./cover_content"))
 
-	apiRouter.StaticFS("/index/video", http.Dir("./video_content"))
-	apiRouter.StaticFS("/index/cover", http.Dir("./cover_content"))
+		// 点赞
+		//favorite := apiRouter.Group("/favorite")
+		JWT.POST("/favorite/action/", videoctl.Like)
+		JWT.GET("/favorite/list/", videoctl.GetLikeList)
 
-
-	// 点赞
-	favorite := apiRouter.Group("/favorite")
-	favorite.POST("/action/", videoctl.Like)
-	favorite.GET("/list/", videoctl.GetLikeList)
-
-
-	// 评论
-	comment := apiRouter.Group("/comment")
-	comment.POST("/action/", videoctl.Comment)
-	comment.GET("/list/", videoctl.GetCommentList)
+		// 评论
+		//comment := apiRouter.Group("/comment")
+		JWT.POST("/comment/action/", videoctl.Comment)
+		JWT.GET("/comment/list/", videoctl.GetCommentList)
+	}
 
 }

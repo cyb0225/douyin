@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.4+incompatible
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/garyburd/redigo v1.6.3
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.7

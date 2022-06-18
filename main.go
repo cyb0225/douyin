@@ -21,13 +21,13 @@ func main() {
 		panic(err.Error())
 	}
 
-	// 初始化redis缓存
-	if err := repository.InitRedis(); err != nil {
-		panic(err.Error)
-	}
-
 	// 连接oss对象存储
 	if err := videoctl.InitOss(); err != nil {
+		panic(err.Error())
+	}
+
+	// 链接 redis
+	if err := repository.InitRedis(); err != nil {
 		panic(err.Error())
 	}
 

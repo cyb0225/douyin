@@ -31,6 +31,7 @@ func (user *Follow) Insert() error {
 		tx.Rollback()
 		return errors.New("Insert to UserDatabase -- Follow tabel error, roll backed")
 	}
+	
 	tx.Commit()
 	mutex.Unlock()
 
@@ -40,7 +41,7 @@ func (user *Follow) Insert() error {
 	// 加入到缓存中
 	userId := strconv.Itoa(int(user.UserId))
 
-	if _, err := Client.Do("HSet", userId, user.ToUserId, 0); err != nil {
+	if _, err := Client.Do("HSet", "follow", userId, user.ToUserId, 0); err != nil {
 		return err
 	}
 

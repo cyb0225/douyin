@@ -5,7 +5,7 @@ package repository
 import (
 	"fmt"
 
-	"github.com/2103561941/douyin/conf"
+	config "github.com/2103561941/douyin/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -39,7 +39,7 @@ func InitDatabase() error {
 	if err := createLikeTable(); err != nil {
 		return err
 	}
-	
+
 	// 创建评论表
 	if err := createCommentTable(); err != nil {
 		return err
@@ -102,7 +102,6 @@ func createCommentTable() error {
 	return nil
 }
 
-
 // 创建mysql dsn字符串，用于连接mysql服务器
 func setDSN() string {
 	username := config.DBconf.Username
@@ -118,7 +117,7 @@ func setDSN() string {
 
 // 连接数据库
 func connectToDB() error {
-	
+
 	dsn := setDSN()
 	var err error
 	if Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{}); err != nil {

@@ -1,6 +1,7 @@
 package userctl
 
 import (
+	"github.com/2103561941/douyin/middleware"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,9 +23,11 @@ func Register(c *gin.Context) {
 		Username: c.Query("username"),
 		Password: c.Query("password"),
 	}
-
-	token := commonctl.CreatToken(user.Username, user.Password)
-
+	
+	token, err := middleware.SetUpToken(user.Username)
+	if err != nil {
+		c.Abort()
+	}
 	if err := user.Register(); err != nil { // register wrong
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,

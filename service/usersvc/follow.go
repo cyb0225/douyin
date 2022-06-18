@@ -15,11 +15,10 @@ type UserFollow struct {
 	Action_type int
 }
 
-
 // 关注action
 const (
-	Not_Followed int = 0  
-	Followed     int = 1  
+	Not_Followed int = 0
+	Followed     int = 1
 	Undefined    int = -1
 )
 
@@ -78,6 +77,9 @@ func (follow *UserFollow) checkUserExist() error {
 	if err := user.SelectByUserId(); err != nil {
 		return err
 	}
+	if err := user.RewriteToRedis(); err != nil { //写回redis。用于更新数据。
+		return errors.New("REDIS --- Rewrite to user error")
+	}
 
 	toUser := &repository.User{
 		Id: follow.To_user_id,
@@ -85,6 +87,9 @@ func (follow *UserFollow) checkUserExist() error {
 
 	if err := toUser.SelectByUserId(); err != nil {
 		return err
+	}
+	if err := toUser.RewriteToRedis(); err != nil { //写回redis。用于更新数据。
+		return errors.New("REDIS --- Rewrite to To_user error")
 	}
 
 	return nil

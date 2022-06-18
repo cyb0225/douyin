@@ -5,6 +5,7 @@
 package userctl
 
 import (
+	"github.com/2103561941/douyin/middleware"
 	"net/http"
 
 	"github.com/2103561941/douyin/controller/commonctl"
@@ -26,7 +27,7 @@ func Login(c *gin.Context) {
 		Password: c.Query("password"),
 	}
 
-	token := commonctl.CreatToken(user.Username, user.Password)
+	//token := commonctl.CreatToken(user.Username, user.Password)
 	user.Password = commonctl.MD5(user.Password)
 	if err := user.Login(); err != nil { // 登录失败
 		c.JSON(http.StatusOK, commonctl.Response{
@@ -34,6 +35,10 @@ func Login(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else {
+		token, err := middleware.SetUpToken(user.Username)
+		if err != nil {
+			c.Abort()
+		}
 		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{Id: user.Id}
 		c.JSON(http.StatusOK, loginResponse{
 			Response: commonctl.Response{Status_code: 0},
@@ -41,5 +46,4 @@ func Login(c *gin.Context) {
 			Token:    token,
 		})
 	}
-
 }

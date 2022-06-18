@@ -16,10 +16,6 @@ type inputStringData struct {
 	Action_type string
 }
 
-//type followResponse struct {
-//	commonctl.Response //response struct
-//}
-
 func Follow(c *gin.Context) {
 	// user is not login or register
 	Token := c.Query("token")

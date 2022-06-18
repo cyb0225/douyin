@@ -5,14 +5,15 @@ package repository
 import (
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 	"sync"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type CommentTable struct {
-	Id     uint64 `gorm:"column:id"` //comment ID
-	UserId uint64 `gorm:"column:user_id; index:idx_UserId"`
+	Id          uint64    `gorm:"column:id"` //comment ID
+	UserId      uint64    `gorm:"column:user_id; index:idx_UserId"`
 	VideoId     uint64    `gorm:"column:video_id"`
 	CommentText string    `gorm:"column:comment_text"`
 	CreatedAt   time.Time `gorm:"column:create_time"`
@@ -22,7 +23,7 @@ func (*CommentTable) TableName() string {
 	return "CommentTable"
 }
 
-func (comment *CommentTable) Create() error {
+func (comment *CommentTable) Insert() error {
 
 	var mutex sync.Mutex
 	mutex.Lock()
@@ -35,7 +36,12 @@ func (comment *CommentTable) Create() error {
 	mutex.Unlock()
 
 	err := tx.Migrator().HasIndex(&CommentTable{}, "idx_UserId")
-	println(err)
+	fmt.Println(err)
+
+	// 插入到缓存中
+
+
+
 	return nil
 }
 
@@ -56,7 +62,7 @@ func (comment *CommentTable) Delete() error {
 
 // 插入评论数据
 func (comment *CommentTable) AddComment() error {
-	if err := comment.insert(); err != nil {
+	if err := comment.Insert(); err != nil {
 		return err
 	}
 	return nil
@@ -64,7 +70,7 @@ func (comment *CommentTable) AddComment() error {
 
 // 删除评论数据
 func (comment *CommentTable) DeleteComment() error {
-	if err := comment.delete(); err != nil {
+	if err := comment.Delete(); err != nil {
 		return err
 	}
 	return nil
@@ -82,35 +88,10 @@ func (comment *CommentTable) GetCommentListRep() ([]*CommentTable, error) {
 	var temp []*CommentTable
 
 	result := Db.Table(comment.TableName()).Where("video_id = ?", comment.VideoId).Find(&temp)
-	
+
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, errors.New(result.Error.Error())
 	}
 	return temp, nil
 }
 
-// -------------------------------------------------------------------------------------------------------------------
-// 插入数据
-func (comment *CommentTable) insert() error {
-	if err := Db.Table(comment.TableName()).Create(&comment).Error; err != nil {
-		return errors.New("Insert to UserDatabase -- comment tabel error")
-	}
-
-	// err := Db.Migrator().HasIndex(&CommentTable{}, "idx_UserId")
-	// println(err)
-
-	return nil
-}
-
-// 删除数据
-func (comment *CommentTable) delete() error {
-	result := Db.Table(comment.TableName()).
-	Where("user_id = ?  AND id = ? AND video_id = ?", comment.UserId, comment.Id, comment.VideoId).Delete(&comment)
-
-	if result.Error != nil {
-		return result.Error
-	} else if result.RowsAffected < 1 {
-		return fmt.Errorf("row with id=%d cannot be deleted because it doesn't exist", comment.Id)
-	}
-	return nil
-}

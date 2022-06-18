@@ -49,7 +49,6 @@ func (like *LikeTable) UpdateLike(act int) error {
 				return err
 			}
 		}
-
 	}
 	
 	if act == 2 { //如果不喜欢
@@ -65,7 +64,6 @@ func (like *LikeTable) UpdateLike(act int) error {
 
 // 获取
 func (like *LikeTable) GetLikeInfoinLike() error {
-	//这块不能用事务。因为要通过报错新建。而且新建已经用事务了
 	result := Db.Table(like.TableName()).Where("user_id = ? AND video_id = ?", like.UserId, like.VideoId).First(like)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) { //未找到就新建
 		like.ActionType = 1

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/2103561941/douyin/conf"
+	config "github.com/2103561941/douyin/conf"
 	"github.com/2103561941/douyin/controller/videoctl"
 	"github.com/2103561941/douyin/repository"
 	"github.com/2103561941/douyin/router"
@@ -21,6 +21,11 @@ func main() {
 		panic(err.Error())
 	}
 
+	// 初始化redis缓存
+	if err := repository.InitRedis(); err != nil {
+		panic(err.Error)
+	}
+
 	// 连接oss对象存储
 	if err := videoctl.InitOss(); err != nil {
 		panic(err.Error())
@@ -31,8 +36,8 @@ func main() {
 	router.InitRouter(engine)
 
 	// 注册pprof的路由
-	pprof.Register(engine) 
-	
+	pprof.Register(engine)
+
 	engine.Run(":9999")
 
 }

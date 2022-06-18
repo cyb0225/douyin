@@ -26,13 +26,18 @@ func main() {
 		panic(err.Error())
 	}
 
+	// 链接 redis
+	if err := repository.InitRedis(); err != nil {
+		panic(err.Error())
+	}
+
 	// 开启路由服务
 	engine := gin.Default()
 	router.InitRouter(engine)
 
 	// 注册pprof的路由
-	pprof.Register(engine) 
-	
+	pprof.Register(engine)
+
 	engine.Run(":9999")
 
 }

@@ -2,6 +2,7 @@
 package usersvc
 
 import (
+	"errors"
 	"github.com/2103561941/douyin/repository"
 )
 
@@ -41,6 +42,10 @@ func (user *UserInfo) SetUserInfo(id uint64) error {
 
 	if err := record.SelectByUserId(); err != nil {
 		return err
+	}
+
+	if err := record.RewriteToRedis(); err != nil { //数据写回
+		return errors.New("REDIS --- Rewrite setuserinfo error")
 	}
 
 	user.Id = record.Id

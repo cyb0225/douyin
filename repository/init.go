@@ -3,7 +3,10 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
+	"github.com/garyburd/redigo/redis"
+	"log"
 
 	"github.com/2103561941/douyin/conf"
 	"gorm.io/driver/mysql"
@@ -39,11 +42,23 @@ func InitDatabase() error {
 	if err := createLikeTable(); err != nil {
 		return err
 	}
-	
+
 	// 创建评论表
 	if err := createCommentTable(); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+// InitRedis init redis conn
+func InitRedis() (err error) {
+	Client, err = redis.Dial("tcp", "127.0.0.1:6379")
+	if err != nil {
+		return errors.New("initialize redis failed")
+	}
+
+	log.Println("redis connect successfully")
 
 	return nil
 }
@@ -102,7 +117,6 @@ func createCommentTable() error {
 	return nil
 }
 
-
 // 创建mysql dsn字符串，用于连接mysql服务器
 func setDSN() string {
 	username := config.DBconf.Username
@@ -118,7 +132,7 @@ func setDSN() string {
 
 // 连接数据库
 func connectToDB() error {
-	
+
 	dsn := setDSN()
 	var err error
 	if Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{}); err != nil {
@@ -127,3 +141,7 @@ func connectToDB() error {
 
 	return nil
 }
+
+var (
+	Client redis.Conn
+)

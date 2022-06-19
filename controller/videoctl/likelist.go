@@ -10,14 +10,6 @@ import (
 )
 
 func GetLikeList(c *gin.Context) {
-	//token := c.Query("token")
-	//if _, ok := commonctl.UserLoginMap[token]; !ok {
-	//	c.JSON(http.StatusOK, commonctl.Response{
-	//		Status_code: -1,
-	//		Status_msg:  "user is not login",
-	//	})
-	//	return
-	//}
 
 	authorInt, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
@@ -33,9 +25,6 @@ func GetLikeList(c *gin.Context) {
 	if boolen == false {
 		log.Println("user_page didn't get")
 	}
-	log.Println("++++++++++++++++++++++++++++++++++++++")
-	log.Println(testcal)
-	log.Println("++++++++++++++++++++++++++++++++++++++")
 
 	userId := testcal.(uint64)
 

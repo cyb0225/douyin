@@ -40,13 +40,7 @@ func Publish(c *gin.Context) {
 
 	// 生成视频名
 	videoFileName := filepath.Base(data.Filename)
-	//c.GetString("user_id")
-	//userID, err := strconv.ParseUint(c.GetString("user_id"), 10, 64)
-	//testcal, boolen := c.Get("middleware_geted_user_id")
-	//if boolen == false {
-	//	log.Println("user_page didn't get")
-	//}
-	//userID := testcal.(uint64)
+	
 	middleware_get_token, err := j.TranslateToken(token)
 	log.Println("publish_list_userid", middleware_get_token)
 	if err != nil {

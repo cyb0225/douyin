@@ -20,19 +20,6 @@ func Feed(c *gin.Context) {
 
 	println(c.Query("latest_time"))
 
-	//testcal, boolen := c.Get("middleware_geted_user_id")
-	//if boolen == false {
-	//	log.Println("user_page didn't get")
-	//}
-	//log.Println("+++++++feed_userid+++++++++++++++++++++++++++++++")
-	//log.Println(testcal)
-	//log.Println("++++++++++++++++++++++++++++++++++++++")
-	//
-	//userId, err := testcal.(uint64)
-	//if err != false {
-	//	userId = 0
-	//	//错误忽略即可。因为没有ID
-	//}
 	j := middleware.NewJWT()
 	middleware_get_token, err := j.TranslateToken(token)
 	log.Println("publish_list_userid", middleware_get_token)

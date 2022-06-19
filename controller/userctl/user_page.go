@@ -35,17 +35,6 @@ func GetUserInfo(c *gin.Context) {
 	if boolen == false {
 		log.Println("user_page didn't get")
 	}
-	log.Println("++++++++++++++++++++++++++++++++++++++")
-	log.Println(testcal)
-	log.Println("++++++++++++++++++++++++++++++++++++++")
-	// this token is not login before
-	//if _, ok := commonctl.UserLoginMap[token]; !ok {
-	//	c.JSON(http.StatusOK, commonctl.Response{
-	//		Status_code: -1,
-	//		Status_msg:  "user is not login",
-	//	})
-	//	return
-	//}
 
 	// token is login, and call service to get user infos by user_id
 	user := &usersvc.UserInfo{

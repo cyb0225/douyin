@@ -23,14 +23,7 @@ type rawcommentdata struct {
 }
 
 func Comment(c *gin.Context) {
-	//Token := c.Query("token")
-	//if _, ok := commonctl.UserLoginMap[Token]; !ok {
-	//	c.JSON(http.StatusOK, commonctl.Response{
-	//		Status_code: -1,
-	//		Status_msg:  "user is not login",
-	//	})
-	//	return
-	//}
+
 	inputdata := rawcommentdata{
 		ToUserID:     c.Query("user_id"),
 		videoID:      c.Query("video_id"),
@@ -46,12 +39,8 @@ func Comment(c *gin.Context) {
 	if boolen == false {
 		log.Println("user_page didn't get")
 	}
-	log.Println("++++++++++++++++++++++++++++++++++++++")
-	log.Println(testcal)
-	log.Println("++++++++++++++++++++++++++++++++++++++")
 
 	user.UserId = testcal.(uint64)
-	//user.UserId = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
 
 	println(user.UserId)
 	if err != nil {

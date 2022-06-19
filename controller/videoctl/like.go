@@ -21,15 +21,7 @@ type rawlikedata struct {
 }
 
 func Like(c *gin.Context) {
-	//Token := c.Query("token")
-	//user not login
-	//if _, ok := commonctl.UserLoginMap[Token]; !ok {
-	//	c.JSON(http.StatusOK, commonctl.Response{
-	//		Status_code: -1,
-	//		Status_msg:  "user is not login",
-	//	})
-	//	return
-	//}
+
 	testcal, boolen := c.Get("middleware_geted_user_id")
 	if boolen == false {
 		log.Println("user_page didn't get")

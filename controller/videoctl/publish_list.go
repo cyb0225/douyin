@@ -16,14 +16,6 @@ type PublishListResponse struct {
 }
 
 func GetPublishList(c *gin.Context) {
-	//token := c.Query("token")
-	//if _, ok := commonctl.UserLoginMap[token]; !ok {
-	//	c.JSON(http.StatusOK, commonctl.Response{
-	//		Status_code: -1,
-	//		Status_msg:  "user is not login",
-	//	})
-	//	return
-	//}
 
 	// query type transform
 	authorInt, err := strconv.Atoi(c.Query("user_id"))
@@ -40,12 +32,8 @@ func GetPublishList(c *gin.Context) {
 	if boolen == false {
 		log.Println("user_page didn't get")
 	}
-	log.Println("+++++++++publishlist+++++++++++++++++++++")
-	log.Println(testcal)
-	log.Println("++++++++++++++++++++++++++++++++++++++")
 
 	userId := testcal.(uint64)
-	//userId := commonctl.UserLoginMap[token].Id // 主动去访问的用户id
 
 	list := videosvc.PublishList{
 		Author: author,

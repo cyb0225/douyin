@@ -36,12 +36,6 @@ func (user *Follow) Insert() error {
 	err := tx.Migrator().HasIndex(&Follow{}, "idx_UserId")
 	println(err)
 
-	// 加入到缓存中
-	//userId := strconv.Itoa(int(user.UserId))
-	//
-	//if _, err := Client.Do("HSet", "follow", userId, user.ToUserId, 0); err != nil {
-	//	return err
-	//}
 
 	return nil
 
@@ -50,15 +44,6 @@ func (user *Follow) Insert() error {
 // 通过用户id查询用户记录
 func (user *Follow) Select() error {
 	//userId := strconv.Itoa(int(user.UserId))
-
-	// 先查看缓存里是否有该记录，如果有直接退出
-	//if res, err := Client.Do("HGet", userId); err != nil {
-	//	log.Println("user is in redis cache")
-	//	user.ToUserId = res.(uint64)
-	//	return nil
-	//}
-	//
-	//log.Println("user is not in redis cache")
 
 	// 若查找不到，则再数据库里继续寻找
 	result := Db.Table(user.TableName()).Where("user_id = ? AND to_user_id = ?", user.UserId, user.ToUserId).First(user)

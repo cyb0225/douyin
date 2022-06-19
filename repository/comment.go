@@ -82,7 +82,6 @@ func (comment *CommentTable) GetCommentID() (uint64, error) {
 	if err != nil {
 		return 0, errors.New("getcommentIDerror")
 	}
-	log.Println("-=-=-=-=-=-=-=-=-=-")
 	return id[0], nil
 }
 

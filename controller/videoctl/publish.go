@@ -1,13 +1,13 @@
 package videoctl
 
 import (
-	"errors"
 	"fmt"
-	"github.com/2103561941/douyin/middleware"
 	"log"
 	"net/http"
 	"path/filepath"
 	"time"
+
+	"github.com/2103561941/douyin/middleware"
 
 	"github.com/2103561941/douyin/controller/commonctl"
 	"github.com/2103561941/douyin/service/videosvc"
@@ -40,17 +40,15 @@ func Publish(c *gin.Context) {
 
 	// 生成视频名
 	videoFileName := filepath.Base(data.Filename)
-	//c.GetString("user_id")
-	//userID, err := strconv.ParseUint(c.GetString("user_id"), 10, 64)
-	//testcal, boolen := c.Get("middleware_geted_user_id")
-	//if boolen == false {
-	//	log.Println("user_page didn't get")
-	//}
-	//userID := testcal.(uint64)
+
+	// 获取作者id
 	var tempjwt middleware.JWT
 	middleware_get_token, err := tempjwt.TranslateToken(token)
 	if err != nil {
-		errors.New("publish_translate_token_error")
+		c.JSON(http.StatusOK, commonctl.Response{
+			Status_code: -1,
+			Status_msg:  "publish_userid_converter_wrong",
+		})
 		return
 	}
 	log.Println("publish_list_userid", middleware_get_token)

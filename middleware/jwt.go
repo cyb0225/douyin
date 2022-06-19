@@ -106,7 +106,7 @@ func JWTToken() gin.HandlerFunc {
 			return
 		}
 		//这个位置加sql查询，通过username和密码 where userid =
-		c.Set("user_id", claims.UserID) //把解析出来的userID放进头部  方便后续逻辑处理
+		c.Set("middleware_geted_user_id", claims.UserID) //把解析出来的userID放进头部  方便后续逻辑处理
 		log.Println(claims.UserID)
 		//这里如果启用的话将进行严格检查。也就是用户必须每次都登陆，token模式将不是JWT而是标准模式。也就是传统鉴权。
 		//if _, ok := commonctl.UserLoginMap[token]; !ok {

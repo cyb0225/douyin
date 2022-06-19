@@ -30,8 +30,11 @@ func GetUserInfo(c *gin.Context) {
 
 	userId := uint64(userIntId)
 
-	token := c.Query("token")
-	testcal := c.GetString("user_id")
+	//token := c.Query("token")
+	testcal, boolen := c.Get("middleware_geted_user_id")
+	if boolen == false {
+		log.Println("user_page didn't get")
+	}
 	log.Println("++++++++++++++++++++++++++++++++++++++")
 	log.Println(testcal)
 	log.Println("++++++++++++++++++++++++++++++++++++++")
@@ -49,9 +52,9 @@ func GetUserInfo(c *gin.Context) {
 		Id: userId,
 	}
 
-	callerId := commonctl.UserLoginMap[token]
-
-	if err := user.SetUserInfo(callerId.Id); err != nil { // read record error
+	//callerId := commonctl.UserLoginMap[token]
+	callerId := testcal.(uint64)
+	if err := user.SetUserInfo(callerId); err != nil { // read record error
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
 			Status_msg:  err.Error(),

@@ -29,7 +29,6 @@ func GetUserInfo(c *gin.Context) {
 
 	userId := uint64(userIntId)
 
-	token := c.Query("token")
 
 	// this token is not login before
 	//if _, ok := commonctl.UserLoginMap[token]; !ok {

@@ -28,6 +28,7 @@ func Register(c *gin.Context) {
 	if err != nil {
 		c.Abort()
 	}
+	
 	if err := user.Register(); err != nil { // register wrong
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,

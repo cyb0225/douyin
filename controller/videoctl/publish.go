@@ -1,12 +1,12 @@
 package videoctl
 
 import (
+	"errors"
 	"fmt"
 	"github.com/2103561941/douyin/middleware"
 	"log"
 	"net/http"
 	"path/filepath"
-	"strconv"
 	"time"
 
 	"github.com/2103561941/douyin/controller/commonctl"
@@ -40,11 +40,22 @@ func Publish(c *gin.Context) {
 
 	// 生成视频名
 	videoFileName := filepath.Base(data.Filename)
-	c.GetString("user_id")
-	userID, err := strconv.ParseUint(c.GetString("user_id"), 10, 64)
-	log.Println("----------------------------")
-	log.Println(c.GetString("user_id"))
-	log.Println("----------------------------")
+	//c.GetString("user_id")
+	//userID, err := strconv.ParseUint(c.GetString("user_id"), 10, 64)
+	//testcal, boolen := c.Get("middleware_geted_user_id")
+	//if boolen == false {
+	//	log.Println("user_page didn't get")
+	//}
+	//userID := testcal.(uint64)
+	var tempjwt middleware.JWT
+	middleware_get_token, err := tempjwt.TranslateToken(token)
+	if err != nil {
+		errors.New("publish_translate_token_error")
+		return
+	}
+	log.Println("publish_list_userid", middleware_get_token)
+	userID := middleware_get_token.UserID
+
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,

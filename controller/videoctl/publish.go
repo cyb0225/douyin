@@ -14,13 +14,13 @@ import (
 func Publish(c *gin.Context) {
 	// 鉴权
 	token := c.PostForm("token")
-	if _, ok := commonctl.UserLoginMap[token]; !ok {
-		c.JSON(http.StatusOK, commonctl.Response{
-			Status_code: -1,
-			Status_msg:  "user is not login",
-		})
-		return
-	}
+	//if _, ok := commonctl.UserLoginMap[token]; !ok {
+	//	c.JSON(http.StatusOK, commonctl.Response{
+	//		Status_code: -1,
+	//		Status_msg:  "user is not login",
+	//	})
+	//	return
+	//}
 
 	// 获取视频数据
 	data, err := c.FormFile("data")

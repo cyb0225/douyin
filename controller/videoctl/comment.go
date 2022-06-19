@@ -24,13 +24,13 @@ type rawcommentdata struct {
 
 func Comment(c *gin.Context) {
 	Token := c.Query("token")
-	if _, ok := commonctl.UserLoginMap[Token]; !ok {
-		c.JSON(http.StatusOK, commonctl.Response{
-			Status_code: -1,
-			Status_msg:  "user is not login",
-		})
-		return
-	}
+	//if _, ok := commonctl.UserLoginMap[Token]; !ok {
+	//	c.JSON(http.StatusOK, commonctl.Response{
+	//		Status_code: -1,
+	//		Status_msg:  "user is not login",
+	//	})
+	//	return
+	//}
 	inputdata := rawcommentdata{
 		ToUserID:     c.Query("user_id"),
 		videoID:      c.Query("video_id"),

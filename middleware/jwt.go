@@ -20,7 +20,7 @@ type initilizeJWT struct {
 
 var JWTinstance = initilizeJWT{
 	JwtKey:          "douyin.com",
-	TokenExpireTime: 60,
+	TokenExpireTime: 6000,
 }
 
 //创建JWT 实例

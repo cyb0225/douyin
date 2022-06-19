@@ -15,13 +15,13 @@ type Commentlistresponse struct {
 
 func GetCommentList(c *gin.Context) {
 	token := c.Query("token")
-	if _, ok := commonctl.UserLoginMap[token]; !ok {
-		c.JSON(http.StatusOK, commonctl.Response{
-			Status_code: -1,
-			Status_msg:  "user is not login",
-		})
-		return
-	}
+	//if _, ok := commonctl.UserLoginMap[token]; !ok {
+	//	c.JSON(http.StatusOK, commonctl.Response{
+	//		Status_code: -1,
+	//		Status_msg:  "user is not login",
+	//	})
+	//	return
+	//}
 
 	videoIDraw, err := strconv.Atoi(c.Query("video_id"))
 	if err != nil {

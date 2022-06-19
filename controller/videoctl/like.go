@@ -22,13 +22,13 @@ type rawlikedata struct {
 func Like(c *gin.Context) {
 	Token := c.Query("token")
 	//user not login
-	if _, ok := commonctl.UserLoginMap[Token]; !ok {
-		c.JSON(http.StatusOK, commonctl.Response{
-			Status_code: -1,
-			Status_msg:  "user is not login",
-		})
-		return
-	}
+	//if _, ok := commonctl.UserLoginMap[Token]; !ok {
+	//	c.JSON(http.StatusOK, commonctl.Response{
+	//		Status_code: -1,
+	//		Status_msg:  "user is not login",
+	//	})
+	//	return
+	//}
 	inputdata := rawlikedata{
 		UserID:     commonctl.UserLoginMap[Token].Id,
 		videoID:    c.Query("video_id"),

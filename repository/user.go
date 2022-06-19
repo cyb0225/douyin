@@ -57,11 +57,11 @@ func (*User) TableName() string {
 
 // }
 
-func (user *User) RewriteToRedis() error { //数据写回redis
+func (user *User) RewriteToRedis() error {                                                                                                                                            //数据写回redis
 	if _, err := Client.Do("HSET", user.Id, "Username", user.Username, "Password", user.Password, "FollowCount", user.FollowCount, "FollowerCount", user.FollowerCount); err != nil { //redis 写入
 		return errors.New("REDIS----Insert to UserDatabase error, roll backed")
 	}
-	return nil 
+	return nil
 }
 
 // 插入数据
@@ -139,14 +139,16 @@ func (user *User) SelectByUserId() error {
 		if err := redis.ScanStruct(redisResult, user); err != nil { //原始redis返回值写入redisconvert结构 全部为string类型
 			fmt.Println(err)
 		}
+		log.Println("Redis Found UserData")
 		// var result *User
 		// err := result.RedisConvert(redisconvert) //转换格式并写入result返回值
 		// if err != nil {
-			// return errors.New("redis conversion error")
+		// return errors.New("redis conversion error")
 		// }
 		//-------------------------------
 
 	} else {
+		log.Println("Redis NOT Found UserData")
 		result := Db.Table(user.TableName()).Where("id = ?", user.Id).First(user)
 
 		// not found

@@ -77,9 +77,9 @@ func (follow *UserFollow) checkUserExist() error {
 	if err := user.SelectByUserId(); err != nil {
 		return err
 	}
-	if err := user.RewriteToRedis(); err != nil { //写回redis。用于更新数据。
-		return errors.New("REDIS --- Rewrite to user error")
-	}
+	//if err := user.RewriteToRedis(); err != nil { //写回redis。用于更新数据。
+	//	return errors.New("REDIS --- Rewrite to user error")
+	//}
 
 	toUser := &repository.User{
 		Id: follow.To_user_id,
@@ -88,9 +88,9 @@ func (follow *UserFollow) checkUserExist() error {
 	if err := toUser.SelectByUserId(); err != nil {
 		return err
 	}
-	if err := toUser.RewriteToRedis(); err != nil { //写回redis。用于更新数据。
-		return errors.New("REDIS --- Rewrite to To_user error")
-	}
+	//if err := toUser.RewriteToRedis(); err != nil { //写回redis。用于更新数据。
+	//	return errors.New("REDIS --- Rewrite to To_user error")
+	//}
 
 	return nil
 }

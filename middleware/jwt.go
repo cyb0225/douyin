@@ -30,15 +30,15 @@ func NewJWT() *JWT {
 
 // 自定义Claim
 type tokenClaims struct {
-	Username string //用户ID
+	UserID uint64 //用户ID
 	jwt.StandardClaims
 }
 
 // SetUpToken 设置 claims，为生成 token 制作准备 "claim"
-func SetUpToken(Username string) (string, error) {
+func SetUpToken(UserID uint64) (string, error) {
 	j := NewJWT()
 	claims := tokenClaims{
-		Username: Username,
+		UserID: UserID,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 240, //aksdjahskiusaghikasdhfdkajsfghsdkhfjdasakurydgbhkyadxguyesadgwaeyiucftewan
 			ExpiresAt: time.Now().Unix() + JWTinstance.TokenExpireTime,
@@ -105,7 +105,9 @@ func JWTToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Set("user_id", claims.Username) //把解析出来的userID放进头部  方便后续逻辑处理
+		//这个位置加sql查询，通过username和密码 where userid =
+		c.Set("user_id", claims.UserID) //把解析出来的userID放进头部  方便后续逻辑处理
+		log.Println(claims.UserID)
 		//这里如果启用的话将进行严格检查。也就是用户必须每次都登陆，token模式将不是JWT而是标准模式。也就是传统鉴权。
 		//if _, ok := commonctl.UserLoginMap[token]; !ok {
 		//	c.JSON(http.StatusOK, commonctl.Response{

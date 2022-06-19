@@ -35,7 +35,7 @@ func Login(c *gin.Context) {
 			Status_msg:  err.Error(),
 		})
 	} else {
-		token, err := middleware.SetUpToken(user.Username)
+		token, err := middleware.SetUpToken(user.Id)
 		if err != nil {
 			c.Abort()
 		}

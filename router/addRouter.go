@@ -15,9 +15,9 @@ func InitRouter(engine *gin.Engine) {
 	apiRouter.POST("/user/register/", userctl.Register)
 	apiRouter.POST("/user/login/", userctl.Login)
 	apiRouter.POST("/publish/action/", videoctl.Publish)
+	apiRouter.GET("/feed", videoctl.Feed)
 	JWT := engine.Group("/douyin", middleware.JWTToken())
 	{
-		JWT.GET("/feed", videoctl.Feed)
 
 		// 用户
 		//apiRouter.POST("/user/register/", userctl.Register)

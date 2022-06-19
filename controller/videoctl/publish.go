@@ -1,7 +1,6 @@
 package videoctl
 
 import (
-	"errors"
 	"fmt"
 	"github.com/2103561941/douyin/middleware"
 	"log"
@@ -47,10 +46,13 @@ func Publish(c *gin.Context) {
 	//	log.Println("user_page didn't get")
 	//}
 	//userID := testcal.(uint64)
-	var tempjwt middleware.JWT
-	middleware_get_token, err := tempjwt.TranslateToken(token)
+	middleware_get_token, err := j.TranslateToken(token)
+	log.Println("publish_list_userid", middleware_get_token)
 	if err != nil {
-		errors.New("publish_translate_token_error")
+		c.JSON(http.StatusOK, commonctl.Response{
+			Status_code: -1,
+			Status_msg:  "publish_token_translation_error",
+		})
 		return
 	}
 	log.Println("publish_list_userid", middleware_get_token)

@@ -23,7 +23,7 @@ type rawcommentdata struct {
 }
 
 func Comment(c *gin.Context) {
-	Token := c.Query("token")
+	//Token := c.Query("token")
 	//if _, ok := commonctl.UserLoginMap[Token]; !ok {
 	//	c.JSON(http.StatusOK, commonctl.Response{
 	//		Status_code: -1,
@@ -41,8 +41,19 @@ func Comment(c *gin.Context) {
 	//------------需要调试的部分-----------------
 
 	user, err := inputdata.converter()
-	user.UserId = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
-	println(commonctl.UserLoginMap[Token].Id)
+
+	testcal, boolen := c.Get("middleware_geted_user_id")
+	if boolen == false {
+		log.Println("user_page didn't get")
+	}
+	log.Println("++++++++++++++++++++++++++++++++++++++")
+	log.Println(testcal)
+	log.Println("++++++++++++++++++++++++++++++++++++++")
+
+	user.UserId = testcal.(uint64)
+	//user.UserId = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
+
+	println(user.UserId)
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,

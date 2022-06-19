@@ -5,6 +5,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -39,8 +40,6 @@ func (comment *CommentTable) Insert() error {
 	fmt.Println(err)
 
 	// 插入到缓存中
-
-
 
 	return nil
 }
@@ -77,10 +76,14 @@ func (comment *CommentTable) DeleteComment() error {
 }
 
 // 获取评论id
-func (comment *CommentTable) GetCommentID() uint64 {
+func (comment *CommentTable) GetCommentID() (uint64, error) {
 	var id []uint64
-	Db.Raw("select LAST_INSERT_ID() as id from CommentTable").Pluck("id", &id)
-	return id[0]
+	err := Db.Raw("select LAST_INSERT_ID() as id from CommentTable").Pluck("id", &id)
+	if err != nil {
+		return 0, errors.New("getcommentIDerror")
+	}
+	log.Println("-=-=-=-=-=-=-=-=-=-")
+	return id[0], nil
 }
 
 // 获取评论列表
@@ -94,4 +97,3 @@ func (comment *CommentTable) GetCommentListRep() ([]*CommentTable, error) {
 	}
 	return temp, nil
 }
-

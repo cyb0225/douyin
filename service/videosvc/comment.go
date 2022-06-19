@@ -22,7 +22,6 @@ type CommentResponseWrapper struct {
 	Create_date string           `json:"create_date"`
 }
 
-
 func (comment *Comment) Comment() error {
 
 	vidinfo := &repository.Video{
@@ -66,11 +65,10 @@ func (comment *Comment) Comment() error {
 	return nil
 }
 
-
 func (comment *CommentResponseWrapper) GetCommentResponse(input *Comment) error {
 	GetID := &repository.CommentTable{}
 
-	comment.Id = GetID.GetCommentID()
+	comment.Id, _ = GetID.GetCommentID()
 
 	user := &usersvc.UserInfo{
 		Id: input.UserId, //评论者ID

@@ -57,7 +57,7 @@ func (*User) TableName() string {
 
 // }
 
-func (user *User) RewriteToRedis() error {                                                                                                                                            //数据写回redis
+func (user *User) RewriteToRedis() error { //数据写回redis
 	if _, err := Client.Do("HSET", user.Id, "Username", user.Username, "Password", user.Password, "FollowCount", user.FollowCount, "FollowerCount", user.FollowerCount); err != nil { //redis 写入
 		return errors.New("REDIS----Insert to UserDatabase error, roll backed")
 	}
@@ -103,6 +103,9 @@ func (user *User) SelectByUsername() error {
 // select user record by user_id
 
 func (user *User) SelectByUserId() error {
+	log.Println("REDISTEST------------------")
+	log.Println(user.Id)
+	log.Println("REDISTEST------------------")
 	redisResult, err := redis.Values(Client.Do("HGETALL", user.Id))
 	if err != nil {
 		return errors.New("REDIS --- SELECT BY USER ID ERROR")

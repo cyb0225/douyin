@@ -3,6 +3,7 @@
 package userctl
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -30,7 +31,10 @@ func GetUserInfo(c *gin.Context) {
 	userId := uint64(userIntId)
 
 	token := c.Query("token")
-
+	testcal := c.GetString("user_id")
+	log.Println("++++++++++++++++++++++++++++++++++++++")
+	log.Println(testcal)
+	log.Println("++++++++++++++++++++++++++++++++++++++")
 	// this token is not login before
 	//if _, ok := commonctl.UserLoginMap[token]; !ok {
 	//	c.JSON(http.StatusOK, commonctl.Response{

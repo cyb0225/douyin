@@ -23,18 +23,18 @@ func Register(c *gin.Context) {
 		Username: c.Query("username"),
 		Password: c.Query("password"),
 	}
-	
-	token, err := middleware.SetUpToken(user.Username)
-	if err != nil {
-		c.Abort()
-	}
+
 	if err := user.Register(); err != nil { // register wrong
 		c.JSON(http.StatusOK, commonctl.Response{
 			Status_code: -1,
 			Status_msg:  err.Error(),
 		})
 	} else { // register success
-		commonctl.UserLoginMap[token] = commonctl.UserLoginComp{Id: user.Id}
+		token, err := middleware.SetUpToken(user.Id)
+		if err != nil {
+			c.Abort()
+		}
+		//commonctl.UserLoginMap[token] = commonctl.UserLoginComp{Id: user.Id}
 		c.JSON(http.StatusOK, registerResponse{
 			Response: commonctl.Response{Status_code: 0},
 			Id:       user.Id,

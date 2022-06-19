@@ -40,7 +40,7 @@ func GetPublishList(c *gin.Context) {
 	if boolen == false {
 		log.Println("user_page didn't get")
 	}
-	log.Println("++++++++++++++++++++++++++++++++++++++")
+	log.Println("+++++++++publishlist+++++++++++++++++++++")
 	log.Println(testcal)
 	log.Println("++++++++++++++++++++++++++++++++++++++")
 

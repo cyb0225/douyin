@@ -108,7 +108,7 @@ func (user *User) SelectByUserId() error {
 	log.Println("REDISTEST------------------")
 	redisResult, err := redis.Values(Client.Do("HGETALL", user.Id))
 	if err != nil {
-		return errors.New("REDIS --- SELECT BY USER ID ERROR")
+		return err
 	}
 
 	/*

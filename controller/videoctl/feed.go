@@ -2,6 +2,7 @@ package videoctl
 
 import (
 	"github.com/2103561941/douyin/controller/commonctl"
+	"github.com/2103561941/douyin/middleware"
 	"github.com/2103561941/douyin/service/videosvc"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -15,23 +16,33 @@ type FeedResponse struct {
 }
 
 func Feed(c *gin.Context) {
-	//token := c.Query("token")
+	token := c.Query("token")
 
 	println(c.Query("latest_time"))
 
-	testcal, boolen := c.Get("middleware_geted_user_id")
-	if boolen == false {
-		log.Println("user_page didn't get")
+	//testcal, boolen := c.Get("middleware_geted_user_id")
+	//if boolen == false {
+	//	log.Println("user_page didn't get")
+	//}
+	//log.Println("+++++++feed_userid+++++++++++++++++++++++++++++++")
+	//log.Println(testcal)
+	//log.Println("++++++++++++++++++++++++++++++++++++++")
+	//
+	//userId, err := testcal.(uint64)
+	//if err != false {
+	//	userId = 0
+	//	//错误忽略即可。因为没有ID
+	//}
+	j := middleware.NewJWT()
+	middleware_get_token, err := j.TranslateToken(token)
+	log.Println("publish_list_userid", middleware_get_token)
+	var userId uint64
+	if err != nil {
+		userId = 0
+	} else {
+		log.Println("publish_list_userid", middleware_get_token)
+		userId = middleware_get_token.UserID
 	}
-	log.Println("++++++++++++++++++++++++++++++++++++++")
-	log.Println(testcal)
-	log.Println("++++++++++++++++++++++++++++++++++++++")
-
-	userId, err := testcal.(uint64)
-	if err != false {
-		//有错忽略即可。因为没有ID
-	}
-
 	//userId := commonctl.UserLoginMap[token].Id // 主动去访问的用户id
 
 	list := videosvc.Feedliststruct{

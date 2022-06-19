@@ -23,7 +23,7 @@ func InitRouter(engine *gin.Engine) {
 		//apiRouter.POST("/user/register/", userctl.Register)
 		//apiRouter.POST("/user/login/", userctl.Login)
 		JWT.GET("/user/", userctl.GetUserInfo)
-
+		//JWT.GET("/feed", videoctl.Feed)
 		// 关注
 		JWT.POST("/relation/action/", userctl.Follow)
 		JWT.GET("/relation/follow/list/", userctl.FollowList)

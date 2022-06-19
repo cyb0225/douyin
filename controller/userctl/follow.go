@@ -19,7 +19,7 @@ type inputStringData struct {
 
 func Follow(c *gin.Context) {
 	// user is not login or register
-	Token := c.Query("token")
+	//Token := c.Query("token")
 	//if _, ok := commonctl.UserLoginMap[Token]; !ok {
 	//	c.JSON(http.StatusOK, commonctl.Response{
 	//		Status_code: -1,
@@ -42,7 +42,16 @@ func Follow(c *gin.Context) {
 		})
 		return
 	}
-	user.User_id = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
+	testcal, boolen := c.Get("middleware_geted_user_id")
+	if boolen == false {
+		log.Println("user_page didn't get")
+	}
+	log.Println("++++++++++++++++++++++++++++++++++++++")
+	log.Println(testcal)
+	log.Println("++++++++++++++++++++++++++++++++++++++")
+
+	//user.User_id = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
+	user.User_id = testcal.(uint64)
 	log.Println(user.User_id)
 	//log.Println(c.GetString("user_id"))
 	//user.User_id, err = strconv.ParseUint(c.GetString("user_id"), 10, 64)

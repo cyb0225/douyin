@@ -1,6 +1,7 @@
 package videoctl
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -20,7 +21,7 @@ type rawlikedata struct {
 }
 
 func Like(c *gin.Context) {
-	Token := c.Query("token")
+	//Token := c.Query("token")
 	//user not login
 	//if _, ok := commonctl.UserLoginMap[Token]; !ok {
 	//	c.JSON(http.StatusOK, commonctl.Response{
@@ -29,14 +30,23 @@ func Like(c *gin.Context) {
 	//	})
 	//	return
 	//}
+	testcal, boolen := c.Get("middleware_geted_user_id")
+	if boolen == false {
+		log.Println("user_page didn't get")
+	}
+	log.Println("++++++++++++++++++++++++++++++++++++++")
+	log.Println(testcal)
+	log.Println("++++++++++++++++++++++++++++++++++++++")
+
 	inputdata := rawlikedata{
-		UserID:     commonctl.UserLoginMap[Token].Id,
+		UserID:     testcal.(uint64),
 		videoID:    c.Query("video_id"),
 		actiontype: c.Query("action_type"),
 	}
 
 	user, err := inputdata.converter()
-	user.UserId = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
+	user.UserId = testcal.(uint64)
+	//user.UserId = commonctl.UserLoginMap[Token].Id // 主动去访问的用户id
 
 	if err != nil {
 		c.JSON(http.StatusOK, commonctl.Response{
